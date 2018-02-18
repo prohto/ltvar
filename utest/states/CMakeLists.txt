@@ -1,0 +1,7 @@
+add_gtest( test_bool "ltype" )
+add_gtest( test_double "ltype" )
+add_gtest( test_hash "ltype" )
+add_gtest( test_integer "ltype" )
+add_gtest( test_array "ltype" )
+add_gtest( test_string "ltype" )
+add_gtest( test_void "ltype" )
