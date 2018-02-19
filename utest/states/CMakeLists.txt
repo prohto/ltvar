@@ -1,0 +1,7 @@
+add_gtest( test_bool "ltvar" )
+add_gtest( test_double "ltvar" )
+add_gtest( test_hash "ltvar" )
+add_gtest( test_integer "ltvar" )
+add_gtest( test_array "ltvar" )
+add_gtest( test_text "ltvar" )
+add_gtest( test_void "ltvar" )
