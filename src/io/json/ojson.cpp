@@ -1,14 +1,13 @@
 #include "ojson.h"
 #include <iomanip>
 
-using namespace Harmonix;
 
 //std::ostream& operator<<(std::ostream& ostream, const std::string& str) {
 //  ostream.write(str.c_str(), str.length());
 //  return ostream;
 //}
 
-void OJson::encode(const LType& value) { serializeFrom(value); }
+void OJson::encode(const LTVar& value) { serializeFrom(value); }
 
 void OJson::encode(const Array& value) {
   (*o_stream_) << "[";
@@ -37,7 +36,7 @@ void OJson::encode(const double& value) {
 void OJson::encode(const Hash& value) {
   (*o_stream_) << "{";
   size_t idx = 0;
-  for (LTypeIterator iter = value.begin(); iter != value.end(); ++iter) {
+  for (LTVarIterator iter = value.begin(); iter != value.end(); ++iter) {
     if (idx > 0) {
       (*o_stream_) << ',';
     }

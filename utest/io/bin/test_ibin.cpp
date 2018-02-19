@@ -5,7 +5,6 @@
 #include "test_iodata.h"
 #include "utest.h"
 
-using namespace Harmonix;
 
 TEST(IBin, len87) {
   std::istringstream og_stream(IOBinData::len87());
@@ -79,118 +78,118 @@ TEST(IBin, len4294967295) {
 
 TEST(IBin, empty_array) {
   std::istringstream in_stream(IOBinData::empty_array());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kArray, in_value);
+  ASSERT_EQ(LTVar::Type::kArray, in_value);
   ASSERT_EQ(0, in_value.size());
 }
 
 TEST(IBin, bool_true) {
   std::istringstream in_stream(IOBinData::bool_true());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kBool, in_value);
+  ASSERT_EQ(LTVar::Type::kBool, in_value);
   ASSERT_EQ(true, in_value);
 }
 
 TEST(IBin, bool_false) {
   std::istringstream in_stream(IOBinData::bool_false());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kBool, in_value);
+  ASSERT_EQ(LTVar::Type::kBool, in_value);
   ASSERT_EQ(false, in_value);
 }
 
 TEST(IBin, double_value) {
   std::istringstream in_stream(IOBinData::double_value());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kDouble, in_value);
+  ASSERT_EQ(LTVar::Type::kDouble, in_value);
   ASSERT_EQ(123.456, in_value);
 }
 
 TEST(IBin, empty_hash) {
   std::istringstream in_stream(IOBinData::empty_hash());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kHash, in_value);
+  ASSERT_EQ(LTVar::Type::kHash, in_value);
   ASSERT_EQ(0, in_value.size());
 }
 
 TEST(IBin, integer) {
   std::istringstream in_stream(IOBinData::integer());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kInteger, in_value);
+  ASSERT_EQ(LTVar::Type::kInteger, in_value);
   ASSERT_EQ(123, in_value);
 }
 
 TEST(IBin, text) {
   std::istringstream in_stream(IOBinData::text());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kText, in_value);
+  ASSERT_EQ(LTVar::Type::kText, in_value);
   ASSERT_EQ(std::string("anything"), in_value);
 }
 
 TEST(IBin, void_value) {
   std::istringstream in_stream(IOBinData::void_value());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kVoid, in_value);
+  ASSERT_EQ(LTVar::Type::kVoid, in_value);
 }
 
 TEST(IBin, fill_array) {
   std::istringstream in_stream(IOBinData::fill_array());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kArray, in_value);
+  ASSERT_EQ(LTVar::Type::kArray, in_value);
   ASSERT_EQ(6, in_value.size());
-  ASSERT_EQ(LType::Type::kBool, in_value[0]);
+  ASSERT_EQ(LTVar::Type::kBool, in_value[0]);
   ASSERT_EQ(true, in_value[0]);
-  ASSERT_EQ(LType::Type::kDouble, in_value[1]);
+  ASSERT_EQ(LTVar::Type::kDouble, in_value[1]);
   ASSERT_EQ(123.456, in_value[1]);
-  ASSERT_EQ(LType::Type::kInteger, in_value[2]);
+  ASSERT_EQ(LTVar::Type::kInteger, in_value[2]);
   ASSERT_EQ(123, in_value[2]);
-  ASSERT_EQ(LType::Type::kText, in_value[3]);
+  ASSERT_EQ(LTVar::Type::kText, in_value[3]);
   ASSERT_EQ(std::string("anything"), in_value[3]);
-  ASSERT_EQ(LType::Type::kVoid, in_value[4]);
-  ASSERT_EQ(LType::Type::kHash, in_value[5]);
+  ASSERT_EQ(LTVar::Type::kVoid, in_value[4]);
+  ASSERT_EQ(LTVar::Type::kHash, in_value[5]);
 }
 
 TEST(IBin, fill_hash) {
   std::istringstream in_stream(IOBinData::fill_hash());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kHash, in_value);
+  ASSERT_EQ(LTVar::Type::kHash, in_value);
   ASSERT_EQ(6, in_value.size());
-  ASSERT_EQ(LType::Type::kBool, in_value["bool"]);
+  ASSERT_EQ(LTVar::Type::kBool, in_value["bool"]);
   ASSERT_EQ(true, in_value["bool"]);
-  ASSERT_EQ(LType::Type::kDouble, in_value["double"]);
+  ASSERT_EQ(LTVar::Type::kDouble, in_value["double"]);
   ASSERT_EQ(123.456, in_value["double"]);
-  ASSERT_EQ(LType::Type::kInteger, in_value["integer"]);
+  ASSERT_EQ(LTVar::Type::kInteger, in_value["integer"]);
   ASSERT_EQ(123, in_value["integer"]);
-  ASSERT_EQ(LType::Type::kText, in_value["text"]);
+  ASSERT_EQ(LTVar::Type::kText, in_value["text"]);
   ASSERT_EQ(std::string("anything"), in_value["text"]);
-  ASSERT_EQ(LType::Type::kVoid, in_value["void"]);
-  ASSERT_EQ(LType::Type::kArray, in_value["array"]);
+  ASSERT_EQ(LTVar::Type::kVoid, in_value["void"]);
+  ASSERT_EQ(LTVar::Type::kArray, in_value["array"]);
   ASSERT_EQ(0, in_value["array"].size());
 }
 
 TEST(IBin, array_hash_nested) {
   std::istringstream in_stream(IOBinData::array_hash_nested());
-  LType in_value;
+  LTVar in_value;
   IBin IBin(in_value);
   in_stream >> IBin;
-  ASSERT_EQ(LType::Type::kVoid, in_value["array"][0]["void"]);
+  ASSERT_EQ(LTVar::Type::kVoid, in_value["array"][0]["void"]);
 }

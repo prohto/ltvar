@@ -1,19 +1,10 @@
 #include "ijson.h"
 #include <iomanip>
-#include "iterator.h"
 #include "json.h"
-#include "ltype.h"
-#include "states/array.h"
-#include "states/bool.h"
-#include "states/double.h"
-#include "states/hash.h"
-#include "states/integer.h"
-#include "states/string.h"
-#include "states/void.h"
+#include "ltvar.h"
 
-using namespace Harmonix;
 
-void IJson::decode(LType& data) {
+void IJson::decode(LTVar& data) {
   JsonState json(*i_stream_);
 
   json.deserialize();

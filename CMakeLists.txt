@@ -1,4 +1,4 @@
-project(LType)
+project(LTVar)
 cmake_minimum_required(VERSION 2.8.11)
 
 set( CMAKE_CXX_FLAGS "-std=c++14" )
@@ -11,5 +11,5 @@ include( GNUInstallDirs )
 add_subdirectory(src)
 add_subdirectory(utest)
 
-CONFIGURE_FILE("ltype.pc.in" "ltype.pc" @ONLY)
-INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/ltype.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig )
+CONFIGURE_FILE("ltvar.pc.in" "ltvar.pc" @ONLY)
+INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/ltvar.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig )

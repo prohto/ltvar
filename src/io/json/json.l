@@ -45,7 +45,7 @@ hexnum            (0x)?[0-9a-fA-F]+
 
 {true}                  { parser_state->push( true ); return VALUE;}
 {false}                 { parser_state->push( false ); return VALUE;}
-{null}                  { parser_state->push( LType::Type::kVoid ); return VALUE; }
+{null}                  { parser_state->push( LTVar::Type::kVoid ); return VALUE; }
 
 [a-zA-Z][a-zA-Z0-9_]+	{ JsonState::unescape( yytext ); parser_state->push( yytext ); return TEXT;}
 

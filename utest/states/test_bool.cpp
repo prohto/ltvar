@@ -1,10 +1,8 @@
-#include "ltype.h"
+#include "ltvar.h"
 #include "test_data.h"
 #include "utest.h"
 
-using namespace std;
 
-using namespace Harmonix;
 using ::testing::An;
 using ::testing::Matcher;
 using ::testing::TypedEq;
@@ -17,7 +15,7 @@ TEST(BoolValue, is) {
   ASSERT_FALSE(value.is_double());
   ASSERT_FALSE(value.is_hash());
   ASSERT_FALSE(value.is_integer());
-  ASSERT_FALSE(value.is_string());
+  ASSERT_FALSE(value.is_text());
   ASSERT_FALSE(value.is_void());
 }
 
@@ -26,7 +24,7 @@ TEST(BoolValue, get_true) {
   ASSERT_EQ(value.get_bool(), TEST_VALUE_BOOL_TRUE);
   ASSERT_EQ(value.get_double(), (double)TEST_VALUE_BOOL_TRUE);
   ASSERT_EQ(value.get_int(), (int)TEST_VALUE_BOOL_TRUE);
-  ASSERT_EQ(value.get_string(), STRINGIFY(TEST_VALUE_BOOL_TRUE));
+  ASSERT_EQ(value.get_text(), STRINGIFY(TEST_VALUE_BOOL_TRUE));
 }
 
 TEST(BoolValue, get_false) {
@@ -34,7 +32,7 @@ TEST(BoolValue, get_false) {
   ASSERT_EQ(value.get_bool(), TEST_VALUE_BOOL_FALSE);
   ASSERT_EQ(value.get_double(), (double)TEST_VALUE_BOOL_FALSE);
   ASSERT_EQ(value.get_int(), (int)TEST_VALUE_BOOL_FALSE);
-  ASSERT_EQ(value.get_string(), STRINGIFY(TEST_VALUE_BOOL_FALSE));
+  ASSERT_EQ(value.get_text(), STRINGIFY(TEST_VALUE_BOOL_FALSE));
 }
 
 TEST(BoolValue, get) {
@@ -46,9 +44,9 @@ TEST(BoolValue, get) {
 
 TEST(BoolValue, set) {
   Bool value;
-  ASSERT_THROW(value.set("tag", LType(TEST_VALUE_BOOL_TRUE)),
+  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_BOOL_TRUE)),
                std::invalid_argument);
-  ASSERT_THROW(value.set((size_t)0, LType(TEST_VALUE_BOOL_TRUE)),
+  ASSERT_THROW(value.set((size_t)0, LTVar(TEST_VALUE_BOOL_TRUE)),
                std::invalid_argument);
 }
 

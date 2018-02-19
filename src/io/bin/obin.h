@@ -4,11 +4,10 @@
 #include <ostream>
 #include "io/encoder.h"
 
-namespace Harmonix {
 
 class OBin : public Encoder {
  protected:
-  virtual void encode(const LType& value);
+  virtual void encode(const LTVar& value);
   virtual void encode(const Array& value);
   virtual void encode(const bool& value);
   virtual void encode(const double& value);
@@ -18,8 +17,7 @@ class OBin : public Encoder {
   virtual void encode();
 
  public:
-  OBin(const LType& data) : Encoder(data) {}
+  OBin(const LTVar& data) : Encoder(data) {}
   static void encode(std::ostream& stream, size_t size);
 };
-}  // namespace Harmonix
 #endif  // IOBINSTREAM_H

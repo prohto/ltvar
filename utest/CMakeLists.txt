@@ -22,6 +22,6 @@ if( CMAKE_BUILD_TYPE STREQUAL "Testing" OR CMAKE_BUILD_TYPE STREQUAL "Debug" )
 	add_subdirectory( states )
 	add_subdirectory( io )
 	
-	add_gtest( test_ltype "ltype" )
+	add_gtest( test_ltvar "ltvar" )
 endif()
 

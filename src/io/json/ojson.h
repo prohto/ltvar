@@ -4,7 +4,6 @@
 #include <sstream>
 #include "io/encoder.h"
 
-namespace Harmonix {
 
 class OJson : public Encoder {
  private:
@@ -15,12 +14,11 @@ class OJson : public Encoder {
   virtual void encode(const int& value);
   virtual void encode(const std::string& value);
   virtual void encode();
-  virtual void encode(const LType& value);
+  virtual void encode(const LTVar& value);
 
  public:
-  OJson(LType& value) : Encoder(value) {}
+  OJson(LTVar& value) : Encoder(value) {}
   virtual ~OJson() {}
 };
 
-}  // namespace Harmonix
 #endif  // OJSON_H

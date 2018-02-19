@@ -4,11 +4,10 @@
 #include <ostream>
 #include "io/decoder.h"
 
-namespace Harmonix {
 
 class IBin : public Decoder {
  protected:
-  virtual void decode(LType& value);
+  virtual void decode(LTVar& value);
   virtual void decode(Array& value);
   virtual void decode(bool& value);
   virtual void decode(double& value);
@@ -18,9 +17,8 @@ class IBin : public Decoder {
   virtual void decode();
 
  public:
-  IBin(LType& data) : Decoder(data){};
+  IBin(LTVar& data) : Decoder(data){};
   virtual ~IBin() {}
   static void decode(std::istream& stream, size_t& size);
 };
-}  // namespace Harmonix
 #endif  // IOBINSTREAM_H

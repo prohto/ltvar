@@ -3,20 +3,19 @@
 
 #include <map>
 #include <string>
-#include "ltype.h"
+#include "ltvar.h"
 
-namespace Harmonix {
 
 class Encoder {
  protected:
-  const LType& data_;
+  const LTVar& data_;
   mutable std::ostream* o_stream_;
   void serializeInto(std::ostream* o_stream) {
     o_stream_ = o_stream;
     encode(data_);
   }
-  virtual void serializeFrom(const LType& value) { value.encode(*this); }
-  virtual void encode(const LType& value) = 0;
+  virtual void serializeFrom(const LTVar& value) { value.encode(*this); }
+  virtual void encode(const LTVar& value) = 0;
   virtual void encode(const Array& value) = 0;
   virtual void encode(const bool& value) = 0;
   virtual void encode(const double& value) = 0;
@@ -24,14 +23,14 @@ class Encoder {
   virtual void encode(const int& value) = 0;
   virtual void encode(const std::string& value) = 0;
   virtual void encode() = 0;
-  Encoder(const LType& data) : data_(data) {}
+  Encoder(const LTVar& data) : data_(data) {}
 
   friend class Array;
   friend class Bool;
   friend class Double;
   friend class Hash;
   friend class Integer;
-  friend class String;
+  friend class Text;
   friend class Void;
 
  public:
@@ -40,6 +39,5 @@ class Encoder {
     return o_stream;
   }
 };
-}  // namespace Harmonix
 
 #endif  // ENCODER_H

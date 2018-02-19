@@ -3,11 +3,10 @@
 
 #include <fstream>
 #include <sstream>
-#include "ltype.h"
+#include "ltvar.h"
 
 #include "test_data.h"
 
-using namespace Harmonix;
 
 #define PUT_TYPE_INTO(t, s)                                    \
   {                                                            \
@@ -33,112 +32,112 @@ class IOBinData {
  public:
   static std::string empty_array() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kArray, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kArray, og_stream);
     PUT_VALUE_INTO(static_cast<unsigned char>(0), og_stream);
     return og_stream.str();
   }
 
   static std::string bool_true() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kBool, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kBool, og_stream);
     PUT_VALUE_INTO(bool(TEST_VALUE_BOOL_TRUE), og_stream);
     return og_stream.str();
   }
 
   static std::string bool_false() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kBool, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kBool, og_stream);
     PUT_VALUE_INTO(bool(TEST_VALUE_BOOL_FALSE), og_stream);
     return og_stream.str();
   }
 
   static std::string double_value() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kDouble, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kDouble, og_stream);
     PUT_VALUE_INTO(TEST_VALUE_DOUBLE, og_stream);
     return og_stream.str();
   }
 
   static std::string empty_hash() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kHash, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kHash, og_stream);
     PUT_VALUE_INTO(static_cast<unsigned char>(0), og_stream);
     return og_stream.str();
   }
 
   static std::string integer() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kInteger, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kInteger, og_stream);
     PUT_VALUE_INTO(TEST_VALUE_INTEGER, og_stream);
     return og_stream.str();
   }
 
   static std::string text() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kText, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kText, og_stream);
     PUT_VALUE_INTO(std::string(TEST_VALUE_TEXT), og_stream);
     return og_stream.str();
   }
 
   static std::string void_value() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kVoid, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kVoid, og_stream);
     return og_stream.str();
   }
 
   static std::string fill_array() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kArray, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kArray, og_stream);
     PUT_VALUE_INTO(static_cast<unsigned char>(6), og_stream);
-    PUT_TYPE_INTO(LType::Type::kBool, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kBool, og_stream);
     PUT_VALUE_INTO(bool(true), og_stream);
-    PUT_TYPE_INTO(LType::Type::kDouble, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kDouble, og_stream);
     PUT_VALUE_INTO(double(TEST_VALUE_DOUBLE), og_stream);
-    PUT_TYPE_INTO(LType::Type::kInteger, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kInteger, og_stream);
     PUT_VALUE_INTO(int(TEST_VALUE_INTEGER), og_stream);
-    PUT_TYPE_INTO(LType::Type::kText, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kText, og_stream);
     PUT_VALUE_INTO(std::string(TEST_VALUE_TEXT), og_stream);
-    PUT_TYPE_INTO(LType::Type::kVoid, og_stream);
-    PUT_TYPE_INTO(LType::Type::kHash, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kVoid, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kHash, og_stream);
     PUT_VALUE_INTO(static_cast<unsigned char>(0), og_stream);
     return og_stream.str();
   }
 
   static std::string fill_hash() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kHash, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kHash, og_stream);
     PUT_VALUE_INTO(static_cast<unsigned char>(6), og_stream);
     PUT_VALUE_INTO(std::string("array"), og_stream);
-    PUT_TYPE_INTO(LType::Type::kArray, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kArray, og_stream);
     PUT_VALUE_INTO(static_cast<unsigned char>(0), og_stream);
     PUT_VALUE_INTO(std::string("bool"), og_stream);
-    PUT_TYPE_INTO(LType::Type::kBool, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kBool, og_stream);
     PUT_VALUE_INTO(bool(true), og_stream);
     PUT_VALUE_INTO(std::string("double"), og_stream);
-    PUT_TYPE_INTO(LType::Type::kDouble, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kDouble, og_stream);
     PUT_VALUE_INTO(double(TEST_VALUE_DOUBLE), og_stream);
     PUT_VALUE_INTO(std::string("integer"), og_stream);
-    PUT_TYPE_INTO(LType::Type::kInteger, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kInteger, og_stream);
     PUT_VALUE_INTO(int(TEST_VALUE_INTEGER), og_stream);
     PUT_VALUE_INTO(std::string("text"), og_stream);
-    PUT_TYPE_INTO(LType::Type::kText, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kText, og_stream);
     PUT_VALUE_INTO(std::string(TEST_VALUE_TEXT), og_stream);
     PUT_VALUE_INTO(std::string("void"), og_stream);
-    PUT_TYPE_INTO(LType::Type::kVoid, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kVoid, og_stream);
     return og_stream.str();
   }
 
   static std::string array_hash_nested() {
     std::ostringstream og_stream;
-    PUT_TYPE_INTO(LType::Type::kHash, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kHash, og_stream);
     PUT_VALUE_INTO(static_cast<unsigned char>(1), og_stream);
     PUT_VALUE_INTO(std::string("array"), og_stream);
-    PUT_TYPE_INTO(LType::Type::kArray, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kArray, og_stream);
     PUT_VALUE_INTO(static_cast<unsigned char>(1), og_stream);
-    PUT_TYPE_INTO(LType::Type::kHash, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kHash, og_stream);
     PUT_VALUE_INTO(static_cast<unsigned char>(1), og_stream);
     PUT_VALUE_INTO(std::string("void"), og_stream);
-    PUT_TYPE_INTO(LType::Type::kVoid, og_stream);
+    PUT_TYPE_INTO(LTVar::Type::kVoid, og_stream);
     std::istringstream in_stream(og_stream.str());
     return og_stream.str();
   }

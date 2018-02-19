@@ -4,7 +4,6 @@
 #include <sstream>
 #include "ojson.h"
 
-namespace Harmonix {
 
 class OJsonPretty : public OJson {
  private:
@@ -17,7 +16,7 @@ class OJsonPretty : public OJson {
   virtual void encode(const Hash& value);
 
  public:
-  OJsonPretty(LType& data)
+  OJsonPretty(LTVar& data)
       : OJson(data),
         level_(0),
         new_line_(0),
@@ -37,5 +36,4 @@ class OJsonPretty : public OJson {
   }
 };
 
-}  // namespace Harmonix
 #endif  // OJSONPRETTY_H

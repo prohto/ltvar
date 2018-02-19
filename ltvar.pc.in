@@ -3,9 +3,9 @@ exec_prefix=${prefix}
 libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
 includedir=${prefix}/include
 
-Name: libltype
+Name: libltvar
 Description: Loosely typed variables for C++.
 Version: 0.1
 
-Libs: -L${libdir} @PRIVATE_LIBS@
-Cflags: -I${includedir} -I${includedir}/ltype
+Libs: -L${libdir} -lltvar
+Cflags: -I${includedir} -I${includedir}/ltvar

@@ -1,6 +1,5 @@
 #include "ojsonpretty.h"
 
-using namespace Harmonix;
 
 void OJsonPretty::encode(const Array& value) {
   (*o_stream_) << "[" << std::string(new_line_, '\n');
@@ -27,7 +26,7 @@ void OJsonPretty::encode(const Hash& value) {
   lines_ += new_line_;
   level_++;
   size_t idx = 0;
-  for (LTypeIterator iter = value.begin(); iter != value.end(); ++iter) {
+  for (LTVarIterator iter = value.begin(); iter != value.end(); ++iter) {
     if (idx > 0) {
       (*o_stream_) << ',' << std::string(new_line_, '\n');
       lines_ += new_line_;

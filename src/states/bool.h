@@ -3,7 +3,6 @@
 
 #include "void.h"
 
-namespace Harmonix {
 class Bool : public Void {
  private:
   bool value_;
@@ -20,10 +19,9 @@ class Bool : public Void {
   virtual bool get_bool() const { return value_; }
   virtual double get_double() const { return value_; }
   virtual int get_int() const { return value_; }
-  virtual std::string get_string() const { return (value_ ? "true" : "false"); }
+  virtual std::string get_text() const { return (value_ ? "true" : "false"); }
   virtual void encode(Encoder& output) const;
   virtual void decode(Decoder& stream);
 };
-}
 
 #endif  // BOOL_H

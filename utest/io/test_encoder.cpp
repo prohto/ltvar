@@ -3,11 +3,10 @@
 
 #include "io/mockencoder.h"
 
-using namespace Harmonix;
 using ::testing::An;
 
 TEST(Encoder, encode_array) {
-  LType value(test_array);
+  LTVar value(test_array);
   MockEncoder encoder(value);
 
   EXPECT_CALL(encoder, encode(An<const Array&>())).Times(1);
@@ -24,7 +23,7 @@ TEST(Encoder, encode_array) {
 }
 
 TEST(Encoder, encode_bool) {
-  LType value(TEST_VALUE_BOOL_TRUE);
+  LTVar value(TEST_VALUE_BOOL_TRUE);
   MockEncoder encoder(value);
 
   EXPECT_CALL(encoder, encode(An<const Array&>())).Times(0);
@@ -41,7 +40,7 @@ TEST(Encoder, encode_bool) {
 }
 
 TEST(Encoder, encode_double) {
-  LType value(TEST_VALUE_DOUBLE);
+  LTVar value(TEST_VALUE_DOUBLE);
   MockEncoder encoder(value);
 
   EXPECT_CALL(encoder, encode(An<const Array&>())).Times(0);
@@ -58,7 +57,7 @@ TEST(Encoder, encode_double) {
 }
 
 TEST(Encoder, encode_hash) {
-  LType value(test_hash);
+  LTVar value(test_hash);
   MockEncoder encoder(value);
 
   EXPECT_CALL(encoder, encode(An<const Array&>())).Times(0);
@@ -75,7 +74,7 @@ TEST(Encoder, encode_hash) {
 }
 
 TEST(Encoder, encode_integer) {
-  LType value(TEST_VALUE_INTEGER);
+  LTVar value(TEST_VALUE_INTEGER);
   MockEncoder encoder(value);
 
   EXPECT_CALL(encoder, encode(An<const Array&>())).Times(0);
@@ -92,7 +91,7 @@ TEST(Encoder, encode_integer) {
 }
 
 TEST(Encoder, encode_text) {
-  LType value(TEST_VALUE_TEXT);
+  LTVar value(TEST_VALUE_TEXT);
   MockEncoder encoder(value);
 
   EXPECT_CALL(encoder, encode(An<const Array&>())).Times(0);
@@ -109,7 +108,7 @@ TEST(Encoder, encode_text) {
 }
 
 TEST(Encoder, encode_void) {
-  LType value;
+  LTVar value;
   MockEncoder encoder(value);
 
   EXPECT_CALL(encoder, encode(An<const Array&>())).Times(0);

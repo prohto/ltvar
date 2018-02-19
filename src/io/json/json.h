@@ -6,9 +6,8 @@
 #include <iostream>
 #include "io/decoder.h"
 
-#include "ltype.h"
+#include "ltvar.h"
 
-using namespace Harmonix;
 
 class JsonState;
 
@@ -23,7 +22,7 @@ int json_parse(YY_EXTRA_TYPE, void *);
 void json_error(YY_EXTRA_TYPE, void *, char *);
 int32_t json_lineno_get(void *scanner);
 
-using elements_stack_t = std::stack<Harmonix::LType>;
+using elements_stack_t = std::stack<LTVar>;
 
 class JsonState {
   elements_stack_t stack_;
@@ -37,13 +36,13 @@ class JsonState {
     json_set_extra(this, yyscanner_);
   }
   ~JsonState() { json_lex_destroy(yyscanner_); }
-  void push(LType value) { stack_.push(value); }
-  LType &top() {
+  void push(LTVar value) { stack_.push(value); }
+  LTVar &top() {
     if (stack_.size() == 0) throw std::invalid_argument("json error");
     return stack_.top();
   }
-  LType pop() {
-    LType rtn = std::move(stack_.top());
+  LTVar pop() {
+    LTVar rtn = std::move(stack_.top());
     stack_.pop();
     return rtn;
   }

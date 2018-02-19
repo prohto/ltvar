@@ -7,7 +7,6 @@
 #include <vector>
 #include "iterator.h"
 
-namespace Harmonix {
 
 class Encoder;
 class Decoder;
@@ -24,13 +23,13 @@ class Void {
   virtual ~Void() {}
   virtual Void* copy() const { return new Void(); }
   virtual bool equal(const Void& rhs) const { return equal_value(rhs); }
-  virtual bool equal(const LTypeArray& rhs) const { return false; }
+  virtual bool equal(const LTVarArray& rhs) const { return false; }
   virtual bool equal(bool rhs) const { return get_bool() == rhs; }
   virtual bool equal(const double rhs) const { return get_double() == rhs; }
-  virtual bool equal(const LTypeHash& rhs) const { return false; }
+  virtual bool equal(const LTVarHash& rhs) const { return false; }
   virtual bool equal(int rhs) const { return get_int() == rhs; }
   virtual bool equal(const std::string& rhs) const {
-    return get_string() == rhs;
+    return get_text() == rhs;
   }
 
   virtual bool is_array() const { return false; }
@@ -38,7 +37,7 @@ class Void {
   virtual bool is_double() const { return false; }
   virtual bool is_hash() const { return false; }
   virtual bool is_integer() const { return false; }
-  virtual bool is_string() const { return false; }
+  virtual bool is_text() const { return false; }
   virtual bool is_void() const { return true; }
 
   virtual bool get_bool() const { throw std::invalid_argument("invalid cast"); }
@@ -46,43 +45,43 @@ class Void {
     throw std::invalid_argument("invalid cast");
   }
   virtual int get_int() const { throw std::invalid_argument("invalid cast"); }
-  virtual std::string get_string() const { return "<void>"; }
+  virtual std::string get_text() const { return "<void>"; }
 
-  virtual const LType& get(const char* tag) const {
+  virtual const LTVar& get(const char* tag) const {
     if (tag == nullptr || tag == 0)
       throw std::invalid_argument("null pointer tag");
     return get(std::string(tag));
   }
-  virtual const LType& get(const std::string& tag) const {
+  virtual const LTVar& get(const std::string& tag) const {
     throw std::invalid_argument("invalid cast");
   }
-  virtual const LType& get(const size_t idx) const {
-    throw std::invalid_argument("invalid cast");
-  }
-
-  virtual LType& operator[](const size_t idx) {
-    throw std::invalid_argument("invalid cast");
-  }
-  virtual LType& operator[](const std::string& tag) {
+  virtual const LTVar& get(const size_t idx) const {
     throw std::invalid_argument("invalid cast");
   }
 
-  virtual LTypeIterator begin() const {
+  virtual LTVar& operator[](const size_t idx) {
     throw std::invalid_argument("invalid cast");
   }
-  virtual LTypeIterator end() const {
+  virtual LTVar& operator[](const std::string& tag) {
     throw std::invalid_argument("invalid cast");
   }
 
-  virtual LType& set(const char* tag, const LType& value) {
+  virtual LTVarIterator begin() const {
+    throw std::invalid_argument("invalid cast");
+  }
+  virtual LTVarIterator end() const {
+    throw std::invalid_argument("invalid cast");
+  }
+
+  virtual LTVar& set(const char* tag, const LTVar& value) {
     if (tag == nullptr || tag == 0)
       throw std::invalid_argument("null pointer tag");
     return set(std::string(tag), value);
   }
-  virtual LType& set(const std::string& tag, const LType& value) {
+  virtual LTVar& set(const std::string& tag, const LTVar& value) {
     throw std::invalid_argument("invalid cast");
   }
-  virtual LType& set(const size_t idx, const LType& value) {
+  virtual LTVar& set(const size_t idx, const LTVar& value) {
     throw std::invalid_argument("invalid cast");
   }
   virtual size_t size() const { throw std::invalid_argument("invalid cast"); }
@@ -93,5 +92,4 @@ class Void {
   virtual void encode(Encoder& output) const;
   virtual void decode(Decoder& input);
 };
-}  // namespace Harmonix
 #endif  // VOID_H

@@ -5,34 +5,33 @@
 #include <memory>
 #include <vector>
 
-namespace Harmonix {
 
-class LType;
+class LTVar;
 
-typedef std::map<std::string, LType> LTypeHash;
-typedef std::vector<LType> LTypeArray;
+typedef std::map<std::string, LTVar> LTVarHash;
+typedef std::vector<LTVar> LTVarArray;
 
-class LTypeIterator;
+class LTVarIterator;
 
 class VoidIterator {
   ;
-  LTypeHash::iterator iterator_;
+  LTVarHash::iterator iterator_;
 
  protected:
   virtual bool equals(const VoidIterator& rhs) const = 0;
   virtual void increment(int delta) = 0;
   virtual bool is_hash() const { return false; }
   virtual bool is_array() const { return false; }
-  friend class LTypeIterator;
+  friend class LTVarIterator;
 
  public:
   virtual ~VoidIterator() {}
-  virtual LType first() = 0;
-  virtual const LType& second() = 0;
+  virtual LTVar first() = 0;
+  virtual const LTVar& second() = 0;
 };
 
 class HashIterator : public VoidIterator {
-  LTypeHash::const_iterator iterator_;
+  LTVarHash::const_iterator iterator_;
 
  protected:
   virtual bool equals(const VoidIterator& rhs) const;
@@ -40,14 +39,14 @@ class HashIterator : public VoidIterator {
   virtual bool is_hash() const { return true; }
 
  public:
-  HashIterator(LTypeHash::const_iterator iterator) : iterator_(iterator) {}
-  virtual LType first();
-  virtual const LType& second();
+  HashIterator(LTVarHash::const_iterator iterator) : iterator_(iterator) {}
+  virtual LTVar first();
+  virtual const LTVar& second();
 };
 
 class ArrayIterator : public VoidIterator {
   size_t index_;
-  LTypeArray::const_iterator iterator_;
+  LTVarArray::const_iterator iterator_;
 
  protected:
   virtual bool equals(const VoidIterator& rhs) const;
@@ -55,27 +54,26 @@ class ArrayIterator : public VoidIterator {
   virtual bool is_array() const { return true; }
 
  public:
-  ArrayIterator(size_t index, LTypeArray::const_iterator iterator)
+  ArrayIterator(size_t index, LTVarArray::const_iterator iterator)
       : index_(index), iterator_(iterator) {}
-  virtual LType first();
-  virtual const LType& second();
+  virtual LTVar first();
+  virtual const LTVar& second();
 };
 
-class LTypeIterator {
+class LTVarIterator {
   std::unique_ptr<VoidIterator> state_;
 
  public:
-  LTypeIterator();
-  LTypeIterator(LTypeIterator&& rhs);
-  LTypeIterator(VoidIterator* state);
-  ~LTypeIterator();
-  virtual LType first();
-  virtual const LType& second();
-  bool operator!=(const LTypeIterator& rhs) const;
-  bool operator==(const LTypeIterator& rhs) const;
-  LTypeIterator& operator++();
-  const LType& operator*();
-  LTypeIterator& operator=(LTypeIterator&& rhs);
+  LTVarIterator();
+  LTVarIterator(LTVarIterator&& rhs);
+  LTVarIterator(VoidIterator* state);
+  ~LTVarIterator();
+  virtual LTVar first();
+  virtual const LTVar& second();
+  bool operator!=(const LTVarIterator& rhs) const;
+  bool operator==(const LTVarIterator& rhs) const;
+  LTVarIterator& operator++();
+  const LTVar& operator*();
+  LTVarIterator& operator=(LTVarIterator&& rhs);
 };
-}  // namespace Harmonix
 #endif  // ITERATOR_H

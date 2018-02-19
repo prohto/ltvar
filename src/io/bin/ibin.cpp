@@ -1,20 +1,12 @@
 #include "ibin.h"
 #include "iterator.h"
-#include "ltype.h"
-#include "states/array.h"
-#include "states/bool.h"
-#include "states/double.h"
-#include "states/hash.h"
-#include "states/integer.h"
-#include "states/string.h"
-#include "states/void.h"
+#include "ltvar.h"
 
-using namespace Harmonix;
 
-void IBin::decode(LType& value) {
-  uint8_t type = LType::Type::kVoid;
+void IBin::decode(LTVar& value) {
+  uint8_t type = LTVar::Type::kVoid;
   (*i_stream_).read(reinterpret_cast<char*>(&type), sizeof(type));
-  value = LType::Type(type);
+  value = LTVar::Type(type);
   deserializeInto(value);
 }
 

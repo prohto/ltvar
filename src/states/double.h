@@ -3,7 +3,6 @@
 
 #include "void.h"
 
-namespace Harmonix {
 class Double : public Void {
  private:
   double value_;
@@ -21,12 +20,11 @@ class Double : public Void {
   virtual bool get_bool() const { return value_; }
   virtual double get_double() const { return value_; }
   virtual int get_int() const { return value_; }
-  virtual std::string get_string() const {
+  virtual std::string get_text() const {
     return std::to_string( value_ );
   }
   virtual void encode(Encoder& output) const;
   virtual void decode(Decoder& stream);
 };
-}
 
 #endif  // DOUBLE_H

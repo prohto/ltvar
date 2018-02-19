@@ -1,18 +1,9 @@
 #include "obin.h"
 #include "io.h"
-#include "iterator.h"
-#include "ltype.h"
-#include "states/array.h"
-#include "states/bool.h"
-#include "states/double.h"
-#include "states/hash.h"
-#include "states/integer.h"
-#include "states/string.h"
-#include "states/void.h"
+#include "ltvar.h"
 
-using namespace Harmonix;
 
-void OBin::encode(const LType& value) {
+void OBin::encode(const LTVar& value) {
   uint8_t type = value.get_type();
   (*o_stream_).write(reinterpret_cast<char*>(&type), sizeof(type));
   serializeFrom(value);
@@ -72,7 +63,7 @@ void OBin::encode(const double& value) {
 
 void OBin::encode(const Hash& value) {
   encode((*o_stream_), value.size());
-  for (LTypeIterator iter = value.begin(); iter != value.end(); ++iter) {
+  for (LTVarIterator iter = value.begin(); iter != value.end(); ++iter) {
     std::string tag = iter.first();
     encode(tag);
     encode(iter.second());

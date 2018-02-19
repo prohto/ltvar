@@ -1,7 +1,6 @@
-#include "ltype.h"
+#include "ltvar.h"
 #include "utest.h"
 
-using namespace Harmonix;
 using ::testing::An;
 using ::testing::Matcher;
 using ::testing::TypedEq;
@@ -14,7 +13,7 @@ TEST(VoidValue, is) {
   ASSERT_FALSE(value.is_double());
   ASSERT_FALSE(value.is_hash());
   ASSERT_FALSE(value.is_integer());
-  ASSERT_FALSE(value.is_string());
+  ASSERT_FALSE(value.is_text());
   ASSERT_TRUE(value.is_void());
 }
 
@@ -23,7 +22,7 @@ TEST(VoidValue, get) {
   ASSERT_THROW(value.get_bool(), std::invalid_argument);
   ASSERT_THROW(value.get_double(), std::invalid_argument);
   ASSERT_THROW(value.get_int(), std::invalid_argument);
-  ASSERT_EQ(value.get_string(), "<void>");
+  ASSERT_EQ(value.get_text(), "<void>");
   ASSERT_THROW(value.get("tag"), std::invalid_argument);
   ASSERT_THROW(value["tag"], std::invalid_argument);
   ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
@@ -39,8 +38,8 @@ TEST(VoidValue, get_const) {
 
 TEST(VoidValue, set) {
   Void value;
-  ASSERT_THROW(value.set("tag", LType()), std::invalid_argument);
-  ASSERT_THROW(value.set((size_t)0, LType()), std::invalid_argument);
+  ASSERT_THROW(value.set("tag", LTVar()), std::invalid_argument);
+  ASSERT_THROW(value.set((size_t)0, LTVar()), std::invalid_argument);
 }
 
 TEST(VoidValue, copy) {
@@ -53,8 +52,8 @@ TEST(VoidValue, differ) {
   Void lhs_value;
   Integer rhs_value;
   ASSERT_NE(lhs_value, rhs_value);
-  LTypeHash hash_value;
-  LTypeArray array_value;
+  LTVarHash hash_value;
+  LTVarArray array_value;
   ASSERT_FALSE(lhs_value.equal(hash_value));
   ASSERT_FALSE(lhs_value.equal(array_value));
 }

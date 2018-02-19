@@ -1,29 +1,20 @@
-#include "iterator.h"
-#include "ltype.h"
-#include "states/array.h"
-#include "states/bool.h"
-#include "states/double.h"
-#include "states/hash.h"
-#include "states/integer.h"
-#include "states/string.h"
-#include "states/void.h"
+#include "ltvar.h"
 
-using namespace Harmonix;
 
-LTypeIterator::LTypeIterator() : state_(nullptr) {}
+LTVarIterator::LTVarIterator() : state_(nullptr) {}
 
-LTypeIterator::LTypeIterator(VoidIterator* state) : state_(state) {}
+LTVarIterator::LTVarIterator(VoidIterator* state) : state_(state) {}
 
-LTypeIterator::LTypeIterator(LTypeIterator&& rhs)
+LTVarIterator::LTVarIterator(LTVarIterator&& rhs)
     : state_(std::move(rhs.state_)) {}
 
-LTypeIterator::~LTypeIterator() {}
+LTVarIterator::~LTVarIterator() {}
 
-LType LTypeIterator::first() { return state_->first(); }
+LTVar LTVarIterator::first() { return state_->first(); }
 
-const LType& LTypeIterator::second() { return state_->second(); }
+const LTVar& LTVarIterator::second() { return state_->second(); }
 
-bool LTypeIterator::operator!=(const LTypeIterator& rhs) const {
+bool LTVarIterator::operator!=(const LTVarIterator& rhs) const {
   if (state_.get() == nullptr || rhs.state_.get() == nullptr) {
   } else if (state_->is_hash() && rhs.state_->is_hash()) {
     return !state_->equals(*rhs.state_);
@@ -33,18 +24,18 @@ bool LTypeIterator::operator!=(const LTypeIterator& rhs) const {
   return true;
 }
 
-bool LTypeIterator::operator==(const LTypeIterator& rhs) const {
+bool LTVarIterator::operator==(const LTVarIterator& rhs) const {
   return !(*this != rhs);
 }
 
-LTypeIterator& LTypeIterator::operator++() {
+LTVarIterator& LTVarIterator::operator++() {
   if (state_ != nullptr) state_->increment(1);
   return *this;
 }
 
-const LType& LTypeIterator::operator*() { return state_->second(); }
+const LTVar& LTVarIterator::operator*() { return state_->second(); }
 
-LTypeIterator& LTypeIterator::operator=(LTypeIterator&& rhs) {
+LTVarIterator& LTVarIterator::operator=(LTVarIterator&& rhs) {
   if (this != &rhs) {
     state_ = std::move(rhs.state_);
   }
@@ -59,8 +50,8 @@ void HashIterator::increment(int delta) {
   for (int idx = 0; idx < delta; idx++) iterator_++;
 }
 
-LType HashIterator::first() { return std::move(LType(iterator_->first)); }
-const LType& HashIterator::second() { return iterator_->second; }
+LTVar HashIterator::first() { return std::move(LTVar(iterator_->first)); }
+const LTVar& HashIterator::second() { return iterator_->second; }
 
 bool ArrayIterator::equals(const VoidIterator& rhs) const {
   return iterator_ == ((ArrayIterator&)rhs).iterator_;
@@ -71,5 +62,5 @@ void ArrayIterator::increment(int delta) {
   iterator_ += delta;
 }
 
-LType ArrayIterator::first() { return std::move(LType((int)index_)); }
-const LType& ArrayIterator::second() { return *iterator_; }
+LTVar ArrayIterator::first() { return std::move(LTVar((int)index_)); }
+const LTVar& ArrayIterator::second() { return *iterator_; }

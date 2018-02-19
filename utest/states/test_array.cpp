@@ -1,15 +1,14 @@
-#include "ltype.h"
+#include "ltvar.h"
 #include "test_data.h"
 #include "utest.h"
 
-using namespace Harmonix;
 using ::testing::An;
 using ::testing::Matcher;
 using ::testing::TypedEq;
 
-LTypeArray test_array_differ = {
-    LType(TEST_VALUE_BOOL_TRUE), LType(TEST_VALUE_DOUBLE),
-    LType(TEST_VALUE_INTEGER), LType(TEST_VALUE_TEXT), LType(TEST_VALUE_TEXT)};
+LTVarArray test_array_differ = {
+    LTVar(TEST_VALUE_BOOL_TRUE), LTVar(TEST_VALUE_DOUBLE),
+    LTVar(TEST_VALUE_INTEGER), LTVar(TEST_VALUE_TEXT), LTVar(TEST_VALUE_TEXT)};
 
 TEST(ArrayValue, is) {
   Array value;
@@ -19,27 +18,27 @@ TEST(ArrayValue, is) {
   ASSERT_FALSE(value.is_double());
   ASSERT_FALSE(value.is_hash());
   ASSERT_FALSE(value.is_integer());
-  ASSERT_FALSE(value.is_string());
+  ASSERT_FALSE(value.is_text());
   ASSERT_FALSE(value.is_void());
 }
 
 TEST(ArrayValue, get_empty) {
   Array value;
-  LTypeArray empty;
+  LTVarArray empty;
   ASSERT_FALSE(value.get_bool());
   ASSERT_EQ(value.get_double(), 0.0);
   ASSERT_EQ(value.get_int(), 0);
-  ASSERT_EQ(value.get_string(), "<array>");
+  ASSERT_EQ(value.get_text(), "<array>");
 
   ASSERT_THROW(value.get((const char *)"tag"), std::invalid_argument);
-  LType void_value;
+  LTVar void_value;
   ASSERT_EQ(value.get((size_t)0), void_value);
   ASSERT_EQ(value.size(), 0);
 }
 
 TEST(ArrayValue, get_const) {
   const Array const_value(test_array);
-  LType void_value;
+  LTVar void_value;
   ASSERT_EQ(const_value.get(test_array.size()), void_value);
   ASSERT_EQ(const_value.size(), test_array.size());
   ASSERT_EQ(const_value.get((size_t)0), test_array[0]);
@@ -50,7 +49,7 @@ TEST(ArrayValue, get_fill) {
   ASSERT_TRUE(value.get_bool());
   ASSERT_EQ(value.get_double(), test_array.size());
   ASSERT_EQ(value.get_int(), test_array.size());
-  ASSERT_EQ(value.get_string(), "<array>");
+  ASSERT_EQ(value.get_text(), "<array>");
 
   ASSERT_THROW(value.get("tag"), std::invalid_argument);
   ASSERT_EQ(value.get((size_t)0), test_array[0]);
@@ -59,9 +58,9 @@ TEST(ArrayValue, get_fill) {
 
 TEST(ArrayValue, set) {
   Array value;
-  ASSERT_THROW(value.set("tag", LType(TEST_VALUE_DOUBLE)),
+  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_DOUBLE)),
                std::invalid_argument);
-  ASSERT_NO_THROW(value.set((size_t)0, LType(TEST_VALUE_DOUBLE)));
+  ASSERT_NO_THROW(value.set((size_t)0, LTVar(TEST_VALUE_DOUBLE)));
 }
 
 TEST(ArrayValue, copy) {
@@ -88,8 +87,8 @@ TEST(ArrayValue, empty_iterator) {
     count++;
   }
   ASSERT_EQ(count, value.size());
-  LTypeIterator biter = value.begin();
-  LTypeIterator eiter = value.end();
+  LTVarIterator biter = value.begin();
+  LTVarIterator eiter = value.end();
   ASSERT_EQ(biter, eiter);
 }
 
@@ -100,7 +99,7 @@ TEST(ArrayValue, fill_iterator) {
     count++;
   }
   ASSERT_EQ(count, value.size());
-  LTypeIterator iter;
+  LTVarIterator iter;
   iter = value.begin();
   ASSERT_EQ(iter.first(), 0);
   ASSERT_EQ(iter.second(), test_array[(size_t)0]);

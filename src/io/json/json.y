@@ -38,7 +38,7 @@ object :
 
 openobject:
   OBRACE{
-    json_state->push( LType::Type::kHash );
+    json_state->push( LTVar::Type::kHash );
   }
 ;
 
@@ -50,7 +50,7 @@ closeobject:
 
 openarray:
   OBRACK{
-    json_state->push( LType::Type::kArray );
+    json_state->push( LTVar::Type::kArray );
   }
 ;
 
@@ -61,8 +61,8 @@ closearray:
 
 member:
   name value {
-    LType value = json_state->pop();
-    LType name = json_state->pop();
+    LTVar value = json_state->pop();
+    LTVar name = json_state->pop();
     json_state->top()[ static_cast<std::string>(name) ] = value;
   }
 ;
@@ -86,13 +86,13 @@ array:
 
 values:
   value {
-    LType value = json_state->pop();
-    LType& array = json_state->top();
+    LTVar value = json_state->pop();
+    LTVar& array = json_state->top();
     array[ array.size() ] = std::move(value);
   }
   | values COMMA value {
-    LType value = json_state->pop();
-    LType& array = json_state->top();
+    LTVar value = json_state->pop();
+    LTVar& array = json_state->top();
     array[ array.size() ] = std::move(value);
   }
 ;

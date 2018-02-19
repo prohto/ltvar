@@ -4,7 +4,7 @@ set( STATES_LIB_SRCS
   double.cpp
   hash.cpp
   integer.cpp
-  string.cpp
+  text.cpp
   void.cpp
 )
 
@@ -15,9 +15,9 @@ set( STATES_LIB_HDRS
   double.h
   hash.h
   integer.h
-  string.h
+  text.h
   void.h
 )
 
 add_library( states OBJECT  ${STATES_LIB_SRCS} ${STATES_LIB_HDRS} )
-install( FILES ${STATES_LIB_HDRS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ltype )
+install( FILES ${STATES_LIB_HDRS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ltvar/states )

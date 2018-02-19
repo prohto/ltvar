@@ -2,14 +2,13 @@
 #include "gtest/gtest.h"
 
 #include "io/json/ojson.h"
-#include "ltype.h"
+#include "ltvar.h"
 #include "test_data.h"
 #include "utest.h"
 
 #include <fstream>
 #include <sstream>
 
-using namespace Harmonix;
 
 PropertyArray empty_array;
 LTtypeHash empty_hash;
