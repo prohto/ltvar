@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}/include
+
+Name: libltvar
+Description: Loosely typed variables for C++.
+Version: 0.1
+
+Libs: -L${libdir} -lltvar
+Cflags: -I${includedir} -I${includedir}/ltvar
