@@ -1,0 +1,16 @@
+language: generic
+matrix:
+  include:
+    # works on Precise and Trusty
+    - os: linux
+      env: COMPILER_NAME=gcc CXX=g++-7 CC=gcc-7
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7 flex bison google-mock libgtest-dev lcov cmake
+
+script:
+- cmake -DCMAKE_BUILD_TYPE=Testing src
+- make
