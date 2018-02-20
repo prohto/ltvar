@@ -33,6 +33,12 @@ LTVarIterator& LTVarIterator::operator++() {
   return *this;
 }
 
+LTVarIterator& LTVarIterator::operator++(int delta ) {
+  if (delta == 0 ) delta=1;
+  if (state_ != nullptr) state_->increment(delta);
+  return *this;
+}
+
 const LTVar& LTVarIterator::operator*() { return state_->second(); }
 
 LTVarIterator& LTVarIterator::operator=(LTVarIterator&& rhs) {

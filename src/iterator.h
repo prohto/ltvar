@@ -73,6 +73,7 @@ class LTVarIterator {
   bool operator!=(const LTVarIterator& rhs) const;
   bool operator==(const LTVarIterator& rhs) const;
   LTVarIterator& operator++();
+  LTVarIterator& operator++(int delta);
   const LTVar& operator*();
   LTVarIterator& operator=(LTVarIterator&& rhs);
 };
