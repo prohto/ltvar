@@ -14,10 +14,14 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 add_subdirectory( states )
 add_subdirectory( io )
 
-add_library( ltvar-static STATIC  ${LTVAR_LIB_SRCS} ${LTVAR_LIB_HDRS} $<TARGET_OBJECTS:states> $<TARGET_OBJECTS:iojson> $<TARGET_OBJECTS:iobin> )
+if( TARGET iojson )
+    LINK_LIBRARIES( $<TARGET_OBJECTS:iojson> )
+endif()
+
+add_library( ltvar-static STATIC  ${LTVAR_LIB_SRCS} ${LTVAR_LIB_HDRS} $<TARGET_OBJECTS:states> $<TARGET_OBJECTS:iobin> )
 set_target_properties(ltvar-static PROPERTIES OUTPUT_NAME ltvar )
 
-add_library( ltvar SHARED  ${LTVAR_LIB_SRCS} ${LTVAR_LIB_HDRS} $<TARGET_OBJECTS:states> $<TARGET_OBJECTS:iojson> $<TARGET_OBJECTS:iobin> )
+add_library( ltvar SHARED  ${LTVAR_LIB_SRCS} ${LTVAR_LIB_HDRS} $<TARGET_OBJECTS:states> $<TARGET_OBJECTS:iobin> )
 set_target_properties(ltvar PROPERTIES SOVERSION "0.1" )
 
 install( FILES ltvar.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include )
