@@ -85,8 +85,8 @@ make intall
 
 Deployment includes  the **pkg-config** file ltvar.pc .
 
-## Usage sample
-The following is a simple exmaple of how to use the Json serializer:
+## Usage example
+The following is a simple example of how to use the Json serializer:
 
 ```c++
 #include <ltvar.h>
