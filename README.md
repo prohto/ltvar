@@ -5,14 +5,14 @@ Loosely typed variables for C++
 
 ## Description
 
-These library was conceived to mimic the loosely typed behaivor of variables in Javascript, to be used in development where the data types and structures are not statically defined at compile time or are ment to change in time.
+These library was conceived to mimic the loosely typed behaivor of variables in Javascript, to be used in development where data types and structures are not statically defined at compile time or are meant to change in time.
 Some posbile uses:
 
 - Configuration
 - Managing messages involved in interprocess communication
 - Dynamic data storing
 
-Other considerations found deep in the roots of the design, was the needs to be easily serializable in any form, so you will find two reference implementation, one for reading from and writing to Json and another to a basic Binary form.
+An important consideration found deep in the roots of the design, was the need to be easily serializable in any form, so you will find two reference implementation, one for reading from and writing to Json and another to a basic Binary form.
 
 
 ## Getting Started
@@ -24,7 +24,7 @@ This project doesn't have any boilerplate dependency, so to build it and start u
 #### Mandatory
 The only mandatory prerequisites are:
 - CMake
-- C++14 capable compiler
+- C++14 compiler support
 - make
 
 #### Optional
@@ -43,7 +43,7 @@ git clone https://github.com/prohto/ltvar.git
 ```
 mkdir <build path>
 cd <build path>
-cmake <path to the cloned repository>
+cmake <path to cloned repository>
 make
 ```
 
@@ -52,21 +52,21 @@ make
 ```
 mkdir <build path>
 cd <build path>
-cmake -DCMAKE_BUILD_TYPE=Testing <path to the cloned repository>
+cmake -DCMAKE_BUILD_TYPE=Testing <path to cloned repository>
 make
 ```
 
 ## Unit Test
-This project was developed following the TDD rules, so you will find test for almost any single line of code in the project. To run the tests you have to build the project for testing.
+This project was developed following TDD rules, so you will find tests for almost any single line of code in the project. To run the tests you have to build the project for testing.
 
-### Running the test
+### Running tests
 ```
 cd <build path>/utest
 make utest
 ```
 
 ### Generating coverage analysis
-It is posible to generate a report of how much code was covered by the test, to do so follow the next command:
+It is posible to generate a report of how much code was covered by the tests, to do so follow the next commands:
 
 ```
 cd <build path>/utest
@@ -76,17 +76,17 @@ firefox index.html
 
 ## Deployment
 
-The deployment is done with CMake running:
+The deployment is done with CMake:
 
 ```
 cd <build path>
 make intall
 ```
 
-The deploy include  the **pkg-config** file ltvar.pc .
+Deployment includes  the **pkg-config** file ltvar.pc .
 
 ## Usage sample
-The following is a simple exmaple how to use the Json serializer:
+The following is a simple exmaple of how to use the Json serializer:
 
 ```c++
 #include <ltvar.h>
@@ -116,7 +116,7 @@ To compile the example
 g++ -o json json.cpp -I/usr/local/include/ltvar -lltvar -L/usr/local/lib64
 ```
 
-For the moment for further usage examples, please look at the many unit tests in file **test_ltvar.cpp**.
+Temporarily for further usage examples, please look at the many unit tests in file **test_ltvar.cpp**.
 
 
 ## Authors
