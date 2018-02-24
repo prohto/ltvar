@@ -22,7 +22,7 @@ add_library( ltvar-static STATIC  ${LTVAR_LIB_SRCS} ${LTVAR_LIB_HDRS} $<TARGET_O
 set_target_properties(ltvar-static PROPERTIES OUTPUT_NAME ltvar )
 
 add_library( ltvar SHARED  ${LTVAR_LIB_SRCS} ${LTVAR_LIB_HDRS} $<TARGET_OBJECTS:states> $<TARGET_OBJECTS:iobin> )
-set_target_properties(ltvar PROPERTIES SOVERSION "0.1" )
+set_target_properties(ltvar PROPERTIES SOVERSION "0.1.1" )
 
 install( FILES ltvar.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include )
 install( FILES iterator.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ltvar )
