@@ -2,7 +2,7 @@
 #include <ijson.h>
 
 int main(){
-  std::istringstream in_stream( "{bool:true, double: 123.456,integer:\t123,\ntext:\"anything\",void:null,array:[]}");
+  std::istringstream in_stream( "{flag:true, money: 123.456,count:\t123,\ndescription:\"anything\",undef:null,list:[]}");
   LTVar value;
   IJson ijson(value);
 

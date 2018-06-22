@@ -16,4 +16,6 @@ class IJson : public Decoder {
   size_t getLinesRead() const { return lines_read_; }
 };
 
+void operator>>(std::string lhs, LTVar& rhs );
+
 #endif  // IOJSONSTREAM_H

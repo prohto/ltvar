@@ -1,5 +1,5 @@
-#ifndef IOBINSTREAM_H
-#define IOBINSTREAM_H
+#ifndef IBIN_H
+#define IBIN_H
 
 #include <ostream>
 #include "io/decoder.h"
@@ -21,4 +21,4 @@ class IBin : public Decoder {
   virtual ~IBin() {}
   static void decode(std::istream& stream, size_t& size);
 };
-#endif  // IOBINSTREAM_H
+#endif  // IBIN_H

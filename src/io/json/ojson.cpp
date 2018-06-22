@@ -91,3 +91,10 @@ void OJson::encode(const std::string& value) {
 }
 
 void OJson::encode() { (*o_stream_) << "null"; }
+
+void operator << ( std::string& lhs, const LTVar &rhs ){
+  std::ostringstream os;
+  OJson ojson( rhs );
+  os << ojson;
+  lhs = os.str();
+}
