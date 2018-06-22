@@ -189,3 +189,11 @@ TEST(IJson, empty_json) {
   ASSERT_THROW(in_stream >> ijson, std::invalid_argument);
   ASSERT_EQ(0, ijson.getLinesRead());
 }
+
+TEST(IJson, string) {
+  LTVar in_value;
+  "{array:[{void:null}]}" >> in_value;
+  ASSERT_EQ(LTVar::Type::kHash, in_value);
+  ASSERT_EQ(LTVar::Type::kVoid, in_value["array"][0]["void"]);
+}
+

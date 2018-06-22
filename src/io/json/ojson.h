@@ -17,8 +17,10 @@ class OJson : public Encoder {
   virtual void encode(const LTVar& value);
 
  public:
-  OJson(LTVar& value) : Encoder(value) {}
+  OJson(const LTVar& value) : Encoder(value) {}
   virtual ~OJson() {}
 };
+
+void operator << ( std::string& lhs, const LTVar &rhs );
 
 #endif  // OJSON_H

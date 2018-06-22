@@ -93,7 +93,7 @@ The following is a simple example of how to use the Json serializer:
 #include <ijson.h>
 
 int main(){
-  std::istringstream in_stream( "{bool:true, double: 123.456,integer:\t123,\ntext:\"anything\",void:null,array:[]}");
+  std::istringstream in_stream( "{flag:true, money: 123.456,count:\t123,\ndescription:\"anything\",undef:null,list:[]}");
   LTVar value;
   IJson ijson(value);
 
@@ -113,7 +113,7 @@ int main(){
 
 To compile the example
 ```
-g++ -o json json.cpp -I/usr/local/include/ltvar -lltvar -L/usr/local/lib64
+g++ -o json json.cpp -I/usr/local/include/ltvar -lltvar -liojson -L/usr/local/lib64
 ```
 
 Temporarily for further usage examples, please look at the many unit tests in file **test_ltvar.cpp**.

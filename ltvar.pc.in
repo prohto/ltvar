@@ -5,7 +5,7 @@ includedir=${prefix}/include
 
 Name: libltvar
 Description: Loosely typed variables for C++.
-Version: 0.1
+Version: @LIB_VERSION@
 
 Libs: -L${libdir} -lltvar
 Cflags: -I${includedir} -I${includedir}/ltvar

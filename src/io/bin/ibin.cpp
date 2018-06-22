@@ -6,6 +6,19 @@
 void IBin::decode(LTVar& value) {
   uint8_t type = LTVar::Type::kVoid;
   (*i_stream_).read(reinterpret_cast<char*>(&type), sizeof(type));
+	switch( type ){
+		case LTVar::kVoid:
+		case LTVar::kBool:
+		case LTVar::kDouble:
+		case LTVar::kHash:
+		case LTVar::kInteger:
+		case LTVar::kArray:
+		case LTVar::kText:
+		break;
+		default:
+			throw std::invalid_argument("invalid binary form");
+		break;
+  }
   value = LTVar::Type(type);
   deserializeInto(value);
 }
