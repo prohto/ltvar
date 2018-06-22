@@ -15,3 +15,9 @@ void IJson::decode(LTVar& data) {
     throw std::invalid_argument("json error");
   }
 }
+
+void operator>>( std::string lhs, LTVar& rhs ){
+  IJson ijson( rhs );
+	std::istringstream is( lhs );
+	is >> ijson;
+}
