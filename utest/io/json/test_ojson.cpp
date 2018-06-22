@@ -88,6 +88,13 @@ TEST(OJson, fill_hash) {
       "\"anything\",\"void\":null}");
 }
 
+TEST(OJson, str) {
+  std::string ojson;
+  LTVar og_value(test_array);
+  ojson << og_value;
+  ASSERT_EQ("[true,123.456,123,\"anything\",null]", ojson);
+}
+
 ////  ASSERT_EQ(
 ////      "{\n"
 ////      "  \"array\": [\n"
