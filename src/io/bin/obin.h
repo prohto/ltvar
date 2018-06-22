@@ -1,5 +1,5 @@
-#ifndef IOBINSTREAM_H
-#define IOBINSTREAM_H
+#ifndef OBIN_H
+#define OBIN_H
 
 #include <ostream>
 #include "io/encoder.h"
@@ -20,4 +20,4 @@ class OBin : public Encoder {
   OBin(const LTVar& data) : Encoder(data) {}
   static void encode(std::ostream& stream, size_t size);
 };
-#endif  // IOBINSTREAM_H
+#endif  // OBIN_H
