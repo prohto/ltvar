@@ -39,8 +39,9 @@ hexnum            (0x)?[0-9a-fA-F]+
 
 %%
 
+\"\"                      { parser_state->push( std::string("") ); return TEXT; }
 \"                      { yy_push_state(STRING, yyscanner); }
-<STRING>([^\"\\]|\\\"|\\\\|\\\/|\\b|\\f|\\n|\\r|\\t|\\u[0-9,a-f,A-F]{4})*	{ JsonState::unescape(yytext); parser_state->push( yytext ); }
+<STRING>([^\"\\]|\\\"|\\\\|\\\/|\\b|\\f|\\n|\\r|\\t|\\u[0-9,a-f,A-F]{4})+	{ JsonState::unescape(yytext); parser_state->push( yytext ); }
 <STRING>\"              { yy_pop_state(yyscanner); return TEXT;}
 
 {true}                  { parser_state->push( true ); return VALUE;}
