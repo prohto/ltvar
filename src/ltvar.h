@@ -57,11 +57,27 @@ class LTVar {
   LTVar& operator[](const std::string& tag);
   const LTVar& operator[](const std::string& tag) const;
 
+  template<typename T>
+  LTVar& set(const char path[], T value ){ static LTVar rtn(LTVar::kVoid); return rtn;}
+  LTVar& get(const char path[] );
+  template<typename T>
+  T get(const char path[] ){ static LTVar rtn(LTVar::kVoid); return rtn;}
+  template<typename T>
+  T get(const char path[], T default_value ){ return default_value;}
   LTVarIterator begin() const;
   LTVarIterator end() const;
 
   friend class Decoder;
   friend class Encoder;
+  template<typename T>
+  friend bool operator==(T lhs, const LTVar& rhs){
+    return rhs == lhs;
+  }
+
+  template<typename T>
+  friend bool operator!=(T lhs, const LTVar& rhs){
+    return rhs != lhs;
+  }
 
  protected:
   std::unique_ptr<Void> state_;
@@ -70,14 +86,6 @@ class LTVar {
   virtual void encode(Encoder& ostream) const;
   virtual void decode(Decoder& istream);
 };
-template <typename T>
-bool operator==(const T lhs, const LTVar& rhs) {
-  return rhs == lhs;
-}
-template <typename T>
-bool operator!=(const T lhs, const LTVar& rhs) {
-  return rhs != lhs;
-}
 
 #include "states/array.h"
 #include "states/bool.h"

@@ -1,5 +1,5 @@
 #include "ltvar.h"
-
+#include <string.h>
 
 LTVar::LTVar() : state_(new Void()), type_(kVoid) {}
 
@@ -158,5 +158,50 @@ const LTVar& LTVar::operator[](const std::string& tag) const {
   return state_.get()->get(tag);
 }
 
+LTVar& LTVar::get(const char path[]) {
+  const char* start = path;
+  const char* end;
+  LTVar* rtn = this;
+  while ((end = strpbrk(start, ".[")) != nullptr) {
+    size_t tag_len = end - start;
+    if (tag_len > 0) {
+      rtn = &(*(rtn->state_.get()))[std::string(start, tag_len)];
+      if (*end == '.') end++;
+      start = end;
+    } else if (*end == '[') {
+      start = ++end;
+      end = strchr(end, ']');
+      if (end == nullptr) throw std::invalid_argument("invalid path");
+      char* stoped_at = nullptr;
+      long index = std::strtol(start, &stoped_at, 10);
+      if (end != stoped_at) throw std::invalid_argument("invalid path");
+      rtn = &(*(rtn->state_.get()))[index];
+      start = ++end;
+      if (*start == '.')
+        start++;
+      else if (*start == '[')
+        ;
+      else if (start != (path + strlen(path)))
+        throw std::invalid_argument("invalid path");
+
+    } else {
+      if (tag_len == 0) throw std::invalid_argument("invalid path");
+    }
+  }
+  size_t rem_len = strlen(path) - (start - path);
+  if (rem_len > 0) rtn = &(*(rtn->state_.get()))[std::string(start, rem_len)];
+  return *rtn;
+}
+// LTVar& LTVar::get(const char path[] ){
+//  const char *start = path;
+//  const char *end;
+//  LTVar *rtn = this;
+//  while( (end = strchr( start, '.')) != nullptr ){
+//    rtn = &(*(rtn->state_.get()))[std::string(start, end - start)];
+//    start = ++end;
+//  }
+//  rtn = &(*(rtn->state_.get()))[std::string(start, strlen(path) - (start -
+//  path ))]; return *rtn;
+//}
 LTVarIterator LTVar::begin() const { return state_.get()->begin(); }
 LTVarIterator LTVar::end() const { return state_.get()->end(); }
