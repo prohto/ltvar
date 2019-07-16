@@ -7,9 +7,12 @@
 #include <vector>
 #include "iterator.h"
 
-
 class Encoder;
 class Decoder;
+
+struct invalid_cast : public std::exception {
+  const char* what() const throw() { return "invalid_cast"; }
+};
 
 class Void {
  protected:
@@ -28,9 +31,7 @@ class Void {
   virtual bool equal(const double rhs) const { return get_double() == rhs; }
   virtual bool equal(const LTVarHash& rhs) const { return false; }
   virtual bool equal(int rhs) const { return get_int() == rhs; }
-  virtual bool equal(const std::string& rhs) const {
-    return get_text() == rhs;
-  }
+  virtual bool equal(const std::string& rhs) const { return get_text() == rhs; }
 
   virtual bool is_array() const { return false; }
   virtual bool is_bool() const { return false; }
@@ -40,11 +41,9 @@ class Void {
   virtual bool is_text() const { return false; }
   virtual bool is_void() const { return true; }
 
-  virtual bool get_bool() const { throw std::invalid_argument("invalid cast"); }
-  virtual double get_double() const {
-    throw std::invalid_argument("invalid cast");
-  }
-  virtual int get_int() const { throw std::invalid_argument("invalid cast"); }
+  virtual bool get_bool() const { throw invalid_cast(); }
+  virtual double get_double() const { throw invalid_cast(); }
+  virtual int get_int() const { throw invalid_cast(); }
   virtual std::string get_text() const { return "<void>"; }
 
   virtual const LTVar& get(const char* tag) const {
@@ -53,25 +52,15 @@ class Void {
     return get(std::string(tag));
   }
   virtual const LTVar& get(const std::string& tag) const {
-    throw std::invalid_argument("invalid cast");
+    throw invalid_cast();
   }
-  virtual const LTVar& get(const size_t idx) const {
-    throw std::invalid_argument("invalid cast");
-  }
+  virtual const LTVar& get(const size_t idx) const { throw invalid_cast(); }
 
-  virtual LTVar& operator[](const size_t idx) {
-    throw std::invalid_argument("invalid cast");
-  }
-  virtual LTVar& operator[](const std::string& tag) {
-    throw std::invalid_argument("invalid cast");
-  }
+  virtual LTVar& operator[](const size_t idx) { throw invalid_cast(); }
+  virtual LTVar& operator[](const std::string& tag) { throw invalid_cast(); }
 
-  virtual LTVarIterator begin() const {
-    throw std::invalid_argument("invalid cast");
-  }
-  virtual LTVarIterator end() const {
-    throw std::invalid_argument("invalid cast");
-  }
+  virtual LTVarIterator begin() const { throw invalid_cast(); }
+  virtual LTVarIterator end() const { throw invalid_cast(); }
 
   virtual LTVar& set(const char* tag, const LTVar& value) {
     if (tag == nullptr || tag == 0)
@@ -79,12 +68,12 @@ class Void {
     return set(std::string(tag), value);
   }
   virtual LTVar& set(const std::string& tag, const LTVar& value) {
-    throw std::invalid_argument("invalid cast");
+    throw invalid_cast();
   }
   virtual LTVar& set(const size_t idx, const LTVar& value) {
-    throw std::invalid_argument("invalid cast");
+    throw invalid_cast();
   }
-  virtual size_t size() const { throw std::invalid_argument("invalid cast"); }
+  virtual size_t size() const { throw invalid_cast(); }
 
   bool operator==(const Void& rhs) const { return this->equal(rhs); };
   bool operator!=(const Void& rhs) const { return !this->equal(rhs); };

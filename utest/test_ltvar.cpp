@@ -1,7 +1,7 @@
+#include <ltvar/ijson.h>
 #include "ltvar.h"
 #include "test_data.h"
 #include "utest.h"
-
 
 TEST(LTVar, array) {
   LTVar value(test_array);
@@ -133,11 +133,11 @@ TEST(LTVar, hash_access) {
   LTVar value;
 
   ASSERT_NE(LTVar::kHash, value);
-  ASSERT_THROW(value["level1"], std::invalid_argument);
+  ASSERT_THROW(value["level1"], invalid_cast);
   value = LTVar::kHash;
   ASSERT_NO_THROW(value["level1"]);
-  ASSERT_THROW(value[1], std::invalid_argument);
-  ASSERT_THROW(value["level1"]["level2"], std::invalid_argument);
+  ASSERT_THROW(value[1], invalid_cast);
+  ASSERT_THROW(value["level1"]["level2"], invalid_cast);
   value["level1"] = LTVar::kHash;
   ASSERT_NO_THROW(value["level1"]["level2"]);
 }
@@ -146,11 +146,11 @@ TEST(LTVar, array_access) {
   LTVar value;
 
   ASSERT_NE(LTVar::kArray, value);
-  ASSERT_THROW(value[1], std::invalid_argument);
+  ASSERT_THROW(value[1], invalid_cast);
   value = LTVar::kArray;
   ASSERT_NO_THROW(value[1]);
-  ASSERT_THROW(value["level1"], std::invalid_argument);
-  ASSERT_THROW(value[1][2], std::invalid_argument);
+  ASSERT_THROW(value["level1"], invalid_cast);
+  ASSERT_THROW(value[1][2], invalid_cast);
   value[1] = LTVar::kArray;
   ASSERT_NO_THROW(value[1][1]);
 }
