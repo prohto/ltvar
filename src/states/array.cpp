@@ -16,7 +16,7 @@ const LTVar& Array::get(const size_t idx) const {
 
 LTVarIterator Array::begin() const {
   LTVarIterator iter(new ArrayIterator(0, value_.begin()));
-  return std::move(iter);
+  return iter;
 }
 
 LTVarIterator Array::end() const {
