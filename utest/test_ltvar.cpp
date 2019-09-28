@@ -136,6 +136,7 @@ TEST(LTVar, hash_access) {
   ASSERT_THROW(value["level1"], invalid_cast);
   value = LTVar::kHash;
   ASSERT_NO_THROW(value["level1"]);
+  ASSERT_THROW(value[""], std::invalid_argument);
   ASSERT_THROW(value[1], invalid_cast);
   ASSERT_THROW(value["level1"]["level2"], invalid_cast);
   value["level1"] = LTVar::kHash;
@@ -153,4 +154,213 @@ TEST(LTVar, array_access) {
   ASSERT_THROW(value[1][2], invalid_cast);
   value[1] = LTVar::kArray;
   ASSERT_NO_THROW(value[1][1]);
+}
+
+TEST(LTVar, get_hash_first_level) {
+  LTVar value;
+
+  ASSERT_THROW(value.get("level1"), invalid_cast);
+  value = LTVar::kHash;
+  ASSERT_THROW(value.get("level1"), std::invalid_argument);
+  value["level1"] = 10;
+  ASSERT_EQ(LTVar::kInteger, value.get("level1"));
+}
+
+TEST(LTVar, get_hash_second_level) {
+  LTVar value(LTVar::kHash);
+
+  ASSERT_THROW(value.get("level1.level2"), invalid_cast);
+  value["level1"] = LTVar::kHash;
+  ASSERT_THROW(value.get("level1.level2"), std::invalid_argument);
+  value["level1"]["level2"] = 10;
+  ASSERT_EQ(LTVar::kInteger, value.get("level1.level2"));
+}
+
+TEST(LTVar, get_hash_third_level) {
+  LTVar value(LTVar::kHash);
+
+  value["level1"] = LTVar::kHash;
+  ASSERT_THROW(value.get("level1.level2.level3"), std::invalid_argument);
+  value["level1"]["level2"] = LTVar::kHash;
+  ASSERT_THROW(value.get("level1.level2.level3"), std::invalid_argument);
+  value["level1"]["level2"]["level3"] = 10;
+  ASSERT_EQ(LTVar::kInteger, value.get("level1.level2.level3"));
+}
+
+TEST(LTVar, get_array_first_level) {
+  LTVar value;
+
+  ASSERT_THROW(value.get("[1]"), invalid_cast);
+  value = LTVar::kArray;
+  ASSERT_THROW(value.get("[1]"), std::invalid_argument);
+  value[1] = 10;
+  ASSERT_EQ(LTVar::kInteger, value.get("[1]"));
+}
+
+TEST(LTVar, get_array_second_level) {
+  LTVar value(LTVar::kArray);
+
+  ASSERT_THROW(value.get("[1][2]"), invalid_cast);
+  value[1] = LTVar::kArray;
+  ASSERT_THROW(value.get("[1][2]"), std::invalid_argument);
+  value[1][2] = 10;
+  ASSERT_EQ(LTVar::kInteger, value.get("[1][2]"));
+}
+
+TEST(LTVar, get_array_third_level) {
+  LTVar value(LTVar::kArray);
+
+  value[1] = LTVar::kArray;
+  ASSERT_THROW(value.get("[1][2][3]"), invalid_cast);
+  value[1][2] = LTVar::kArray;
+  ASSERT_THROW(value.get("[1][2][3]"), std::invalid_argument);
+  value[1][2][3] = 10;
+  ASSERT_EQ(LTVar::kInteger, value.get("[1][2][3]"));
+}
+
+TEST(LTVar, get_mixed_hash_start) {
+  LTVar value(LTVar::kHash);
+
+  value["level1"] = LTVar::kArray;
+  value["level1"][0] = "text";
+  value["level1"][1] = LTVar::kHash;
+  value["level1"][1]["level3"] = false;
+
+  ASSERT_EQ(LTVar::kText, value.get("level1[0]"));
+  ASSERT_EQ(LTVar::kBool, value.get("level1[1].level3"));
+}
+
+TEST(LTVar, get_mixed_array_start) {
+  LTVar value(LTVar::kArray);
+
+  value[0] = "text";
+  value[1] = LTVar::kHash;
+  value[1]["level2"] = LTVar::kArray;
+  value[1]["level2"][0] = "text";
+  value[1]["level2"][1] = false;
+
+  ASSERT_EQ(LTVar::kText, value.get("[0]"));
+  ASSERT_EQ(LTVar::kText, value.get("[1].level2[0]"));
+  ASSERT_EQ(LTVar::kBool, value.get("[1].level2[1]"));
+}
+
+TEST(LTVar, get_hash_invalid_argument) {
+  LTVar value(LTVar::kHash);
+
+  value["level1"] = LTVar::kArray;
+  ASSERT_THROW(value.get(".level2.level3"), std::invalid_argument);
+  ASSERT_THROW(value.get("level1..level2"), std::invalid_argument);
+  ASSERT_THROW(value.get("level1[1]..level2"), std::invalid_argument);
+}
+
+TEST(LTVar, get_array_invalid_argument) {
+  LTVar value(LTVar::kArray);
+
+  value[0] = LTVar::kArray;
+  value[1] = LTVar::kHash;
+  value[1]["level3"] = LTVar::kArray;
+  ASSERT_THROW(value.get("[uuu].level2"), std::invalid_argument);
+  ASSERT_THROW(value.get("[0][ddd]"), std::invalid_argument);
+  ASSERT_THROW(value.get("[1].level3[ssss]"), std::invalid_argument);
+}
+
+TEST(LTVar, get_missing_default) {
+  LTVar value(LTVar::kArray);
+
+  value[0] = "text";
+  value[1] = LTVar::kHash;
+  value[1]["level2"] = LTVar::kArray;
+  value[1]["level2"][0] = "text";
+  value[1]["level2"][1] = false;
+
+  ASSERT_THROW(value.get("level1[2]", true), invalid_cast);
+  ASSERT_THROW(value.get("[1][2]", true), invalid_cast);
+  ASSERT_EQ(true, value.get("[2]", true));
+  ASSERT_EQ(true, value.get("[1].unknown", true));
+  value[2] = "FOUND";
+  ASSERT_EQ("FOUND", value.get("[2]", "DEFAULT"));
+  ASSERT_EQ("false", value.get("[1].level2[1]", std::string("true")));
+}
+
+TEST(LTVar, set_hash_first_level) {
+  LTVar value(LTVar::kBool);
+
+  ASSERT_THROW(value.set("level1", LTVar::kBool), std::invalid_argument);
+  value = LTVar::kHash;
+  ASSERT_NO_THROW(value.set("level1", LTVar::kBool));
+  ASSERT_EQ(LTVar::kBool, value["level1"]);
+}
+
+TEST(LTVar, set_hash_second_level) {
+  LTVar value(LTVar::kHash);
+
+  ASSERT_THROW(value.set("level1.level2", LTVar::kBool), std::invalid_argument);
+  value["level1"] = LTVar::kBool;
+  ASSERT_THROW(value.set("level1.level2", LTVar::kBool), std::invalid_argument);
+  value["level1"] = LTVar::kVoid;
+  ASSERT_NO_THROW(value.set("level1.level2", LTVar::kBool));
+  ASSERT_EQ(LTVar::kBool, value["level1"]["level2"]);
+}
+
+TEST(LTVar, set_hash_third_level) {
+  LTVar value(LTVar::kHash);
+
+  value["level1"] = LTVar::kHash;
+  ASSERT_THROW(value.set("level1.level2.level3", LTVar::kBool),
+               std::invalid_argument);
+  value["level1"]["level2"] = LTVar::kHash;
+  ASSERT_NO_THROW(value.set("level1.level2.level3", LTVar::kBool));
+  ASSERT_EQ(LTVar::kBool, value["level1"]["level2"]["level3"]);
+}
+
+TEST(LTVar, set_array_first_level) {
+  LTVar value(LTVar::kBool);
+
+  ASSERT_THROW(value.set("[1]", LTVar::kBool), std::invalid_argument);
+  value = LTVar::kArray;
+  ASSERT_NO_THROW(value.set("[1]", LTVar::kBool));
+  ASSERT_EQ(LTVar::kBool, value[1]);
+}
+
+TEST(LTVar, set_array_second_level) {
+  LTVar value(LTVar::kArray);
+
+  ASSERT_THROW(value.set("[1][2]", LTVar::kBool), std::invalid_argument);
+  value[1] = LTVar::kBool;
+  ASSERT_THROW(value.set("[1][2]", LTVar::kBool), std::invalid_argument);
+  value[1] = LTVar::kVoid;
+  ASSERT_NO_THROW(value.set("[1][2]", LTVar::kBool));
+  ASSERT_EQ(LTVar::kBool, value[1][2]);
+}
+
+TEST(LTVar, set_array_third_level) {
+  LTVar value(LTVar::kArray);
+
+  value[1] = LTVar::kArray;
+  ASSERT_THROW(value.set("[1][2][3]", LTVar::kBool), std::invalid_argument);
+  value[1][2] = LTVar::kArray;
+  ASSERT_NO_THROW(value.set("[1][2][3]", LTVar::kBool));
+  ASSERT_EQ(LTVar::kBool, value[1][2][3]);
+}
+
+TEST(LTVar, set_mixed_hash_start) {
+  LTVar value;
+
+  ASSERT_NO_THROW(value.set("level1[0]", LTVar::kText));
+  ASSERT_NO_THROW(value.set("level1[1].level3", LTVar::kBool));
+
+  ASSERT_EQ(LTVar::kText, value.get("level1[0]"));
+  ASSERT_EQ(LTVar::kBool, value.get("level1[1].level3"));
+}
+
+TEST(LTVar, set_mixed_array_start) {
+  LTVar value;
+
+  ASSERT_NO_THROW(value.set("[0]", LTVar::kText));
+  ASSERT_NO_THROW(value.set("[1].level2[0]", LTVar::kText));
+  ASSERT_NO_THROW(value.set("[1].level2[1]", LTVar::kBool));
+
+  ASSERT_EQ(LTVar::kText, value.get("[0]"));
+  ASSERT_EQ(LTVar::kText, value.get("[1].level2[0]"));
+  ASSERT_EQ(LTVar::kBool, value.get("[1].level2[1]"));
 }
