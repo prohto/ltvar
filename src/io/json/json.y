@@ -63,7 +63,7 @@ member:
   name value {
     LTVar value = json_state->pop();
     LTVar name = json_state->pop();
-    json_state->top()[ static_cast<std::string>(name) ] = value;
+    json_state->top()[ name ] = value;
   }
 ;
 

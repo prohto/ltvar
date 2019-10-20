@@ -5,7 +5,6 @@
 #include <memory>
 #include <vector>
 
-
 class LTVar;
 
 typedef std::map<std::string, LTVar> LTVarHash;
@@ -14,7 +13,6 @@ typedef std::vector<LTVar> LTVarArray;
 class LTVarIterator;
 
 class VoidIterator {
-  ;
   LTVarHash::iterator iterator_;
 
  protected:
@@ -34,14 +32,15 @@ class HashIterator : public VoidIterator {
   LTVarHash::const_iterator iterator_;
 
  protected:
-  virtual bool equals(const VoidIterator& rhs) const;
-  virtual void increment(int delta);
-  virtual bool is_hash() const { return true; }
+  virtual bool equals(const VoidIterator& rhs) const override;
+  virtual void increment(int delta) override;
+  virtual bool is_hash() const override { return true; }
 
  public:
-  HashIterator(LTVarHash::const_iterator iterator) : iterator_(iterator) {}
-  virtual LTVar first();
-  virtual const LTVar& second();
+  explicit HashIterator(LTVarHash::const_iterator iterator)
+      : iterator_(iterator) {}
+  virtual LTVar first() override;
+  virtual const LTVar& second() override;
 };
 
 class ArrayIterator : public VoidIterator {
@@ -49,15 +48,15 @@ class ArrayIterator : public VoidIterator {
   LTVarArray::const_iterator iterator_;
 
  protected:
-  virtual bool equals(const VoidIterator& rhs) const;
-  virtual void increment(int delta);
-  virtual bool is_array() const { return true; }
+  virtual bool equals(const VoidIterator& rhs) const override;
+  virtual void increment(int delta) override;
+  virtual bool is_array() const override { return true; }
 
  public:
   ArrayIterator(size_t index, LTVarArray::const_iterator iterator)
       : index_(index), iterator_(iterator) {}
-  virtual LTVar first();
-  virtual const LTVar& second();
+  virtual LTVar first() override;
+  virtual const LTVar& second() override;
 };
 
 class LTVarIterator {
@@ -66,8 +65,8 @@ class LTVarIterator {
  public:
   LTVarIterator();
   LTVarIterator(LTVarIterator&& rhs);
-  LTVarIterator(VoidIterator* state);
-  ~LTVarIterator();
+  explicit LTVarIterator(VoidIterator* state);
+  virtual ~LTVarIterator();
   virtual LTVar first();
   virtual const LTVar& second();
   bool operator!=(const LTVarIterator& rhs) const;
