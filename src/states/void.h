@@ -61,6 +61,9 @@ class Void {
 
   virtual LTVarIterator begin() const { throw invalid_cast(); }
   virtual LTVarIterator end() const { throw invalid_cast(); }
+  virtual LTVarIterator find(const std::string& tag) const {
+    throw invalid_cast();
+  }
 
   virtual LTVar& set(const char* tag, const LTVar& value) {
     if (tag == nullptr || tag == 0)

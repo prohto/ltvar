@@ -5,6 +5,11 @@ using ::testing::An;
 using ::testing::Matcher;
 using ::testing::TypedEq;
 
+TEST(VoidValue, exception) {
+  invalid_cast excep;
+  ASSERT_EQ(std::string("invalid_cast"), excep.what());
+}
+
 TEST(VoidValue, is) {
   Void value;
 
@@ -62,4 +67,5 @@ TEST(VoidValue, iteratore) {
   Void value;
   ASSERT_THROW(value.begin(), invalid_cast);
   ASSERT_THROW(value.end(), invalid_cast);
+  ASSERT_THROW(value.find("void"), invalid_cast);
 }

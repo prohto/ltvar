@@ -2,9 +2,7 @@
 #include "io/io.h"
 #include "iterator.h"
 
-LTVar& Hash::operator[](const std::string& tag) {
-  return value_[tag];
-}
+LTVar& Hash::operator[](const std::string& tag) { return value_[tag]; }
 
 const LTVar& Hash::get(const std::string& tag) const {
   static LTVar default_value;
@@ -20,6 +18,11 @@ LTVarIterator Hash::begin() const {
 
 LTVarIterator Hash::end() const {
   LTVarIterator iter(new HashIterator(value_.end()));
+  return iter;
+}
+
+LTVarIterator Hash::find(const std::string& tag) const {
+  LTVarIterator iter(new HashIterator(value_.find(tag)));
   return iter;
 }
 

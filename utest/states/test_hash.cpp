@@ -122,5 +122,5 @@ TEST(HashValue, fill_iterator) {
   ASSERT_EQ(count, value.size());
   LTVarIterator iter;
   iter = value.begin();
-  ASSERT_EQ(iter.second(), test_hash_local[(std::string)iter.first()]);
+  ASSERT_EQ(iter.second(), test_hash_local[iter.first()]);
 }
