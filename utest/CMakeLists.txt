@@ -23,5 +23,6 @@ if( CMAKE_BUILD_TYPE STREQUAL "Testing" OR CMAKE_BUILD_TYPE STREQUAL "Debug" )
   add_subdirectory( io )
 	
   add_gtest( test_ltvar "ltvar" )
+  add_gtest( test_tokenizer "ltvar" )
 endif()
 
