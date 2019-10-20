@@ -1,5 +1,6 @@
 #include "ltvar.h"
 #include <string.h>
+#include "tokenizer.h"
 
 LTVar::LTVar() : state_(new Void()), type_(kVoid) {}
 
@@ -143,6 +144,7 @@ LTVar::operator bool() const { return state_.get()->get_bool(); }
 LTVar::operator double() const { return state_.get()->get_double(); }
 LTVar::operator int() const { return state_.get()->get_int(); }
 LTVar::operator std::string() const { return state_.get()->get_text(); }
+LTVar::operator const char*() const { return state_.get()->get_text().c_str(); }
 
 LTVar& LTVar::operator[](const size_t idx) { return (*(state_.get()))[idx]; }
 
@@ -158,40 +160,63 @@ const LTVar& LTVar::operator[](const std::string& tag) const {
   return state_.get()->get(tag);
 }
 
-LTVar& LTVar::get(const char path[]) {
-  const char* start = path;
-  const char* end;
-  LTVar* rtn = this;
-  while ((end = strpbrk(start, ".[")) != nullptr) {
-    size_t tag_len = end - start;
-    if (tag_len > 0) {
-      rtn = &(*(rtn->state_.get()))[std::string(start, tag_len)];
-      if (*end == '.') end++;
-      start = end;
-    } else if (*end == '[') {
-      start = ++end;
-      end = strchr(end, ']');
-      if (end == nullptr) throw std::invalid_argument("invalid path");
-      char* stoped_at = nullptr;
-      long index = std::strtol(start, &stoped_at, 10);
-      if (end != stoped_at) throw std::invalid_argument("invalid path");
-      rtn = &(*(rtn->state_.get()))[index];
-      start = ++end;
-      if (*start == '.')
-        start++;
-      else if (*start == '[')
-        ;
-      else if (start != (path + strlen(path)))
-        throw std::invalid_argument("invalid path");
+LTVar LTVar::get(const char path[]) {
+  Tokenizer tk(path);
+  static LTVar void_return;
 
+  LTVar* rtn = this;
+  while (tk.hasNext()) {
+    if (rtn->get_type() == Type::kVoid) {
+      throw invalid_cast();
+    } else if (rtn->get_type() == Type::kHash &&
+               tk.getType() == Tokenizer::kTag) {
+      auto tag = tk.getTag();
+      if (rtn->state_.get()->find(tag) == rtn->state_.get()->end()) {
+        rtn = &void_return;
+      } else {
+        rtn = &(*rtn)[tag];
+      }
+    } else if (rtn->get_type() == Type::kArray &&
+               tk.getType() == Tokenizer::kIndex) {
+      auto index = tk.getIndex();
+      if (index >= rtn->size()) {
+        rtn = &void_return;
+      } else {
+        rtn = &(*rtn)[index];
+      }
     } else {
-      if (tag_len == 0) throw std::invalid_argument("invalid path");
+      throw invalid_cast();
     }
   }
-  size_t rem_len = strlen(path) - (start - path);
-  if (rem_len > 0) rtn = &(*(rtn->state_.get()))[std::string(start, rem_len)];
   return *rtn;
 }
+
+LTVar& LTVar::set(const char path[]) {
+  Tokenizer tk(path);
+  static LTVar void_return;
+
+  LTVar* rtn = this;
+  while (tk.hasNext()) {
+    if (rtn->get_type() == Type::kVoid) {
+      if (tk.getType() == Tokenizer::kTag)
+        *rtn = Type::kHash;
+      else
+        *rtn = Type::kArray;
+    }
+    if (rtn->get_type() == Type::kHash && tk.getType() == Tokenizer::kTag) {
+      auto tag = tk.getTag();
+      rtn = &(*rtn)[tag];
+    } else if (rtn->get_type() == Type::kArray &&
+               tk.getType() == Tokenizer::kIndex) {
+      auto index = tk.getIndex();
+      rtn = &(*rtn)[index];
+    } else {
+      throw invalid_cast();
+    }
+  }
+  return *rtn;
+}
+
 // LTVar& LTVar::get(const char path[] ){
 //  const char *start = path;
 //  const char *end;
@@ -205,3 +230,6 @@ LTVar& LTVar::get(const char path[]) {
 //}
 LTVarIterator LTVar::begin() const { return state_.get()->begin(); }
 LTVarIterator LTVar::end() const { return state_.get()->end(); }
+LTVarIterator LTVar::find(const std::string& tag) const {
+  return state_.get()->find(tag);
+}

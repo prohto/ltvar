@@ -5,7 +5,6 @@
 #include <string>
 #include "states/void.h"
 
-
 class Void;
 class Decoder;
 class Encoder;
@@ -52,30 +51,44 @@ class LTVar {
   explicit operator double() const;
   explicit operator int() const;
   operator std::string() const;
+  operator const char*() const;
   LTVar& operator[](const size_t idx);
   const LTVar& operator[](const size_t idx) const;
   LTVar& operator[](const std::string& tag);
   const LTVar& operator[](const std::string& tag) const;
 
-  template<typename T>
-  LTVar& set(const char path[], T value ){ static LTVar rtn(LTVar::kVoid); return rtn;}
-  LTVar& get(const char path[] );
-  template<typename T>
-  T get(const char path[] ){ static LTVar rtn(LTVar::kVoid); return rtn;}
-  template<typename T>
-  T get(const char path[], T default_value ){ return default_value;}
+  LTVar& set(const char path[]);
+  template <typename T>
+  LTVar& set(const char path[], T value) {
+    LTVar& rtn = set(path);
+    rtn = value;
+    return rtn;
+  }
+  LTVar get(const char path[]);
+  template <typename T>
+  T get(const char path[]) {
+    static LTVar rtn(LTVar::kVoid);
+    return rtn;
+  }
+  template <typename T>
+  T get(const char path[], T default_value) {
+    LTVar value = get(path);
+    if (value.get_type() == Type::kVoid) return default_value;
+    return static_cast<T>(value);
+  }
   LTVarIterator begin() const;
   LTVarIterator end() const;
+  LTVarIterator find(const std::string& tag) const;
 
   friend class Decoder;
   friend class Encoder;
-  template<typename T>
-  friend bool operator==(T lhs, const LTVar& rhs){
+  template <typename T>
+  friend bool operator==(T lhs, const LTVar& rhs) {
     return rhs == lhs;
   }
 
-  template<typename T>
-  friend bool operator!=(T lhs, const LTVar& rhs){
+  template <typename T>
+  friend bool operator!=(T lhs, const LTVar& rhs) {
     return rhs != lhs;
   }
 
