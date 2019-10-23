@@ -30,7 +30,7 @@ TEST(ArrayValue, get_empty) {
   ASSERT_EQ(value.get_int(), 0);
   ASSERT_EQ(value.get_text(), "<array>");
 
-  ASSERT_THROW(value.get((const char *)"tag"), std::invalid_argument);
+  ASSERT_THROW(value.get((const char *)"tag"), invalid_cast);
   LTVar void_value;
   ASSERT_EQ(value.get((size_t)0), void_value);
   ASSERT_EQ(value.size(), 0);
@@ -51,15 +51,14 @@ TEST(ArrayValue, get_fill) {
   ASSERT_EQ(value.get_int(), test_array.size());
   ASSERT_EQ(value.get_text(), "<array>");
 
-  ASSERT_THROW(value.get("tag"), std::invalid_argument);
+  ASSERT_THROW(value.get("tag"), invalid_cast);
   ASSERT_EQ(value.get((size_t)0), test_array[0]);
   ASSERT_EQ(value.size(), test_array.size());
 }
 
 TEST(ArrayValue, set) {
   Array value;
-  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_DOUBLE)),
-               std::invalid_argument);
+  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_DOUBLE)), invalid_cast);
   ASSERT_NO_THROW(value.set((size_t)0, LTVar(TEST_VALUE_DOUBLE)));
 }
 

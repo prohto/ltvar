@@ -32,6 +32,7 @@ class Hash : public Void {
 
   virtual LTVarIterator begin() const;
   virtual LTVarIterator end() const;
+  virtual LTVarIterator find(const std::string& tag) const;
 
   virtual LTVar& set(const std::string& tag, const LTVar& value) {
     return value_[tag] = value;

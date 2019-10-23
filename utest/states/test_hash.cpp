@@ -54,7 +54,7 @@ TEST(HashValue, get_empty) {
   ASSERT_EQ(value.get_int(), 0);
   ASSERT_EQ(value.get_text(), "<hash>");
   ASSERT_EQ(value.get("tag"), LTVar());
-  ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
+  ASSERT_THROW(value.get((size_t)0), invalid_cast);
   ASSERT_EQ(value.size(), 0);
 }
 
@@ -72,15 +72,14 @@ TEST(HashValue, get_fill) {
   ASSERT_EQ(value.get_int(), test_hash.size());
   ASSERT_EQ(value.get_text(), "<hash>");
   ASSERT_EQ(value.get("double"), test_hash_local["double"]);
-  ASSERT_THROW(value.get((const size_t)0), std::invalid_argument);
+  ASSERT_THROW(value.get((const size_t)0), invalid_cast);
   ASSERT_EQ(value.size(), test_hash.size());
 }
 
 TEST(HashValue, set) {
   Hash value;
   ASSERT_NO_THROW(value.set("tag", LTVar(TEST_VALUE_DOUBLE)));
-  ASSERT_THROW(value.set((size_t)0, LTVar(TEST_VALUE_DOUBLE)),
-               std::invalid_argument);
+  ASSERT_THROW(value.set((size_t)0, LTVar(TEST_VALUE_DOUBLE)), invalid_cast);
   ASSERT_THROW(value.set(nullptr, LTVar(TEST_VALUE_DOUBLE)),
                std::invalid_argument);
 }
@@ -123,5 +122,5 @@ TEST(HashValue, fill_iterator) {
   ASSERT_EQ(count, value.size());
   LTVarIterator iter;
   iter = value.begin();
-  ASSERT_EQ(iter.second(), test_hash_local[(std::string)iter.first()]);
+  ASSERT_EQ(iter.second(), test_hash_local[iter.first()]);
 }

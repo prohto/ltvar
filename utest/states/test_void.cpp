@@ -5,6 +5,11 @@ using ::testing::An;
 using ::testing::Matcher;
 using ::testing::TypedEq;
 
+TEST(VoidValue, exception) {
+  invalid_cast excep;
+  ASSERT_EQ(std::string("invalid_cast"), excep.what());
+}
+
 TEST(VoidValue, is) {
   Void value;
 
@@ -19,27 +24,27 @@ TEST(VoidValue, is) {
 
 TEST(VoidValue, get) {
   Void value;
-  ASSERT_THROW(value.get_bool(), std::invalid_argument);
-  ASSERT_THROW(value.get_double(), std::invalid_argument);
-  ASSERT_THROW(value.get_int(), std::invalid_argument);
+  ASSERT_THROW(value.get_bool(), invalid_cast);
+  ASSERT_THROW(value.get_double(), invalid_cast);
+  ASSERT_THROW(value.get_int(), invalid_cast);
   ASSERT_EQ(value.get_text(), "<void>");
-  ASSERT_THROW(value.get("tag"), std::invalid_argument);
-  ASSERT_THROW(value["tag"], std::invalid_argument);
-  ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
-  ASSERT_THROW(value[(size_t)0], std::invalid_argument);
+  ASSERT_THROW(value.get("tag"), invalid_cast);
+  ASSERT_THROW(value["tag"], invalid_cast);
+  ASSERT_THROW(value.get((size_t)0), invalid_cast);
+  ASSERT_THROW(value[(size_t)0], invalid_cast);
   ASSERT_THROW(value.get(nullptr), std::invalid_argument);
 }
 
 TEST(VoidValue, get_const) {
   const Void value;
-  ASSERT_THROW(value.get("tag"), std::invalid_argument);
-  ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
+  ASSERT_THROW(value.get("tag"), invalid_cast);
+  ASSERT_THROW(value.get((size_t)0), invalid_cast);
 }
 
 TEST(VoidValue, set) {
   Void value;
-  ASSERT_THROW(value.set("tag", LTVar()), std::invalid_argument);
-  ASSERT_THROW(value.set((size_t)0, LTVar()), std::invalid_argument);
+  ASSERT_THROW(value.set("tag", LTVar()), invalid_cast);
+  ASSERT_THROW(value.set((size_t)0, LTVar()), invalid_cast);
 }
 
 TEST(VoidValue, copy) {
@@ -60,6 +65,7 @@ TEST(VoidValue, differ) {
 
 TEST(VoidValue, iteratore) {
   Void value;
-  ASSERT_THROW(value.begin(), std::invalid_argument);
-  ASSERT_THROW(value.end(), std::invalid_argument);
+  ASSERT_THROW(value.begin(), invalid_cast);
+  ASSERT_THROW(value.end(), invalid_cast);
+  ASSERT_THROW(value.find("void"), invalid_cast);
 }
