@@ -144,7 +144,6 @@ LTVar::operator bool() const { return state_.get()->get_bool(); }
 LTVar::operator double() const { return state_.get()->get_double(); }
 LTVar::operator int() const { return state_.get()->get_int(); }
 LTVar::operator std::string() const { return state_.get()->get_text(); }
-LTVar::operator const char*() const { return state_.get()->get_text().c_str(); }
 
 LTVar& LTVar::operator[](const size_t idx) { return (*(state_.get()))[idx]; }
 
@@ -160,11 +159,11 @@ const LTVar& LTVar::operator[](const std::string& tag) const {
   return state_.get()->get(tag);
 }
 
-LTVar LTVar::get(const char path[]) {
+LTVar LTVar::get(const char *path) const{
   Tokenizer tk(path);
   static LTVar void_return;
 
-  LTVar* rtn = this;
+  const LTVar* rtn = this;
   while (tk.hasNext()) {
     if (rtn->get_type() == Type::kVoid) {
       throw invalid_cast();

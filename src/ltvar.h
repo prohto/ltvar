@@ -51,27 +51,32 @@ class LTVar {
   explicit operator double() const;
   explicit operator int() const;
   operator std::string() const;
-  operator const char*() const;
   LTVar& operator[](const size_t idx);
   const LTVar& operator[](const size_t idx) const;
   LTVar& operator[](const std::string& tag);
   const LTVar& operator[](const std::string& tag) const;
 
   LTVar& set(const char path[]);
+  LTVar& set(const char path[], LTVar::Type type ) {
+    LTVar& rtn = set(path);
+    if( rtn.get_type() != type ) rtn = type;
+    return rtn;
+  }
   template <typename T>
   LTVar& set(const char path[], T value) {
     LTVar& rtn = set(path);
     rtn = value;
     return rtn;
   }
-  LTVar get(const char path[]);
-  template <typename T>
-  T get(const char path[]) {
-    static LTVar rtn(LTVar::kVoid);
-    return rtn;
+  LTVar get(const std::string& path) const{ return get( path.c_str());}
+  LTVar get(const char *path) const;
+  std::string get(const char path[], const char* default_value) const{
+    LTVar value = get(path);
+    if (value.get_type() == Type::kVoid) return std::string(default_value);
+    return static_cast<std::string>(value);
   }
   template <typename T>
-  T get(const char path[], T default_value) {
+  T get(const char path[], T default_value) const{
     LTVar value = get(path);
     if (value.get_type() == Type::kVoid) return default_value;
     return static_cast<T>(value);
