@@ -282,6 +282,15 @@ TEST(LTVar, get_missing_default) {
   ASSERT_EQ(false, value.get("[1].level2[1]", true));
 }
 
+TEST(LTVar, reset_type) {
+  LTVar value(LTVar::kHash);
+
+  value.set( "level1.level2", "text" );
+  value.set( "level1", LTVar::kHash );
+  ASSERT_EQ(value.get("level1.level2" ), std::string("text") );
+  value.set( "level1", LTVar::kBool );
+  ASSERT_EQ(LTVar::kBool, value["level1"]);
+}
 TEST(LTVar, set_hash_first_level) {
   LTVar value(LTVar::kBool);
 
