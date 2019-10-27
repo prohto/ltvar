@@ -25,17 +25,15 @@ TEST(IntegerValue, get) {
   ASSERT_EQ(value.get_int(), (int)(TEST_VALUE_INTEGER));
   ASSERT_EQ(value.get_text(), STRINGIFY(TEST_VALUE_INTEGER));
 
-  ASSERT_THROW(value.get("tag"), std::invalid_argument);
-  ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
-  ASSERT_THROW(value.size(), std::invalid_argument);
+  ASSERT_THROW(value.get("tag"), invalid_cast);
+  ASSERT_THROW(value.get((size_t)0), invalid_cast);
+  ASSERT_THROW(value.size(), invalid_cast);
 }
 
 TEST(IntegerValue, set) {
   Integer value;
-  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_INTEGER)),
-               std::invalid_argument);
-  ASSERT_THROW(value.set((size_t)0, LTVar(TEST_VALUE_INTEGER)),
-               std::invalid_argument);
+  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_INTEGER)), invalid_cast);
+  ASSERT_THROW(value.set((size_t)0, LTVar(TEST_VALUE_INTEGER)), invalid_cast);
 }
 
 TEST(IntegerValue, copy) {

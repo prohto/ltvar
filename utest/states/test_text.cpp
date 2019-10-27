@@ -24,9 +24,9 @@ TEST(TextValue, get_true) {
   ASSERT_THROW(value.get_double(), std::invalid_argument);
   ASSERT_THROW(value.get_int(), std::invalid_argument);
   ASSERT_EQ(value.get_text(), STRINGIFY(TEST_VALUE_BOOL_TRUE));
-  ASSERT_THROW(value.get("tag"), std::invalid_argument);
-  ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
-  ASSERT_THROW(value.size(), std::invalid_argument);
+  ASSERT_THROW(value.get("tag"), invalid_cast);
+  ASSERT_THROW(value.get((size_t)0), invalid_cast);
+  ASSERT_THROW(value.size(), invalid_cast);
 }
 
 TEST(TextValue, get_double) {
@@ -35,9 +35,9 @@ TEST(TextValue, get_double) {
   ASSERT_EQ(value.get_double(), TEST_VALUE_DOUBLE);
   ASSERT_EQ(value.get_int(), TEST_VALUE_INTEGER);
   ASSERT_EQ(value.get_text(), STRINGIFY(TEST_VALUE_DOUBLE));
-  ASSERT_THROW(value.get("tag"), std::invalid_argument);
-  ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
-  ASSERT_THROW(value.size(), std::invalid_argument);
+  ASSERT_THROW(value.get("tag"), invalid_cast);
+  ASSERT_THROW(value.get((size_t)0), invalid_cast);
+  ASSERT_THROW(value.size(), invalid_cast);
 }
 
 TEST(TextValue, get_integer) {
@@ -46,9 +46,9 @@ TEST(TextValue, get_integer) {
   ASSERT_EQ(value.get_double(), TEST_VALUE_INTEGER);
   ASSERT_EQ(value.get_int(), TEST_VALUE_INTEGER);
   ASSERT_EQ(value.get_text(), STRINGIFY(TEST_VALUE_INTEGER));
-  ASSERT_THROW(value.get("tag"), std::invalid_argument);
-  ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
-  ASSERT_THROW(value.size(), std::invalid_argument);
+  ASSERT_THROW(value.get("tag"), invalid_cast);
+  ASSERT_THROW(value.get((size_t)0), invalid_cast);
+  ASSERT_THROW(value.size(), invalid_cast);
 }
 
 TEST(TextValue, get_anything) {
@@ -57,17 +57,15 @@ TEST(TextValue, get_anything) {
   ASSERT_THROW(value.get_double(), std::invalid_argument);
   ASSERT_THROW(value.get_int(), std::invalid_argument);
   ASSERT_EQ(value.get_text(), TEST_VALUE_TEXT);
-  ASSERT_THROW(value.get("tag"), std::invalid_argument);
-  ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
-  ASSERT_THROW(value.size(), std::invalid_argument);
+  ASSERT_THROW(value.get("tag"), invalid_cast);
+  ASSERT_THROW(value.get((size_t)0), invalid_cast);
+  ASSERT_THROW(value.size(), invalid_cast);
 }
 
 TEST(TextValue, set) {
   Text value;
-  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_TEXT)),
-               std::invalid_argument);
-  ASSERT_THROW(value.set((size_t)0, LTVar(TEST_VALUE_TEXT)),
-               std::invalid_argument);
+  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_TEXT)), invalid_cast);
+  ASSERT_THROW(value.set((size_t)0, LTVar(TEST_VALUE_TEXT)), invalid_cast);
 }
 
 TEST(TextValue, copy) {

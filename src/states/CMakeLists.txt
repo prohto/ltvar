@@ -20,4 +20,4 @@ set( STATES_LIB_HDRS
 )
 
 add_library( states OBJECT  ${STATES_LIB_SRCS} ${STATES_LIB_HDRS} )
-install( FILES ${STATES_LIB_HDRS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/ltvar/states )
+install( FILES ${STATES_LIB_HDRS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/states )

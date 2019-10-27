@@ -1,7 +1,7 @@
 project(LTVar)
 cmake_minimum_required(VERSION 2.8.11)
 
-set(LIB_VERSION "0.1.2" )
+set(LIB_VERSION "0.2.0" )
 
 
 

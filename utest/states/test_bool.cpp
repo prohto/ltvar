@@ -2,7 +2,6 @@
 #include "test_data.h"
 #include "utest.h"
 
-
 using ::testing::An;
 using ::testing::Matcher;
 using ::testing::TypedEq;
@@ -37,17 +36,15 @@ TEST(BoolValue, get_false) {
 
 TEST(BoolValue, get) {
   Bool value;
-  ASSERT_THROW(value.get("tag"), std::invalid_argument);
-  ASSERT_THROW(value.get((size_t)0), std::invalid_argument);
-  ASSERT_THROW(value.size(), std::invalid_argument);
+  ASSERT_THROW(value.get("tag"), invalid_cast);
+  ASSERT_THROW(value.get((size_t)0), invalid_cast);
+  ASSERT_THROW(value.size(), invalid_cast);
 }
 
 TEST(BoolValue, set) {
   Bool value;
-  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_BOOL_TRUE)),
-               std::invalid_argument);
-  ASSERT_THROW(value.set((size_t)0, LTVar(TEST_VALUE_BOOL_TRUE)),
-               std::invalid_argument);
+  ASSERT_THROW(value.set("tag", LTVar(TEST_VALUE_BOOL_TRUE)), invalid_cast);
+  ASSERT_THROW(value.set((size_t)0, LTVar(TEST_VALUE_BOOL_TRUE)), invalid_cast);
 }
 
 TEST(BoolValue, copy_true) {
