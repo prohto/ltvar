@@ -2,13 +2,11 @@
 #define MOCKDESERIALIZER_H
 
 #include "gmock/gmock.h"
-
 #include "io/decoder.h"
 #include "ltvar.h"
 
 using ::testing::An;
 using ::testing::Invoke;
-
 
 class MockDecoder : public Decoder {
  private:
@@ -32,6 +30,12 @@ class MockDecoder : public Decoder {
   MOCK_METHOD1(decode, void(int&));
   MOCK_METHOD1(decode, void(std::string&));
   MOCK_METHOD0(decode, void());
+};
+
+class NullDecoder : public Decoder {
+ public:
+  NullDecoder(LTVar& property) : Decoder(property) {}
+  void decode(LTVar& value) { deserializeInto(value); }
 };
 
 #endif  // MOCKDESERIALIZER_H
