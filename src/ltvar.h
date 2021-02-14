@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+
 #include "states/void.h"
 
 class Void;
@@ -51,15 +52,20 @@ class LTVar {
   explicit operator double() const;
   explicit operator int() const;
   operator std::string() const;
-  LTVar& operator[](const size_t idx);
-  const LTVar& operator[](const size_t idx) const;
-  LTVar& operator[](const std::string& tag);
-  const LTVar& operator[](const std::string& tag) const;
+  explicit operator const char*() const;
+  LTVar& operator[](size_t idx);
+  LTVar& operator[](int idx);
+  LTVar& operator[](const char tag[]);
+  LTVar& operator[](const LTVar& value);
+  const LTVar& operator[](size_t idx) const;
+  const LTVar& operator[](int idx) const;
+  const LTVar& operator[](const char tag[]) const;
+  const LTVar& operator[](const LTVar& value) const;
 
   LTVar& set(const char path[]);
-  LTVar& set(const char path[], LTVar::Type type ) {
+  LTVar& set(const char path[], LTVar::Type type) {
     LTVar& rtn = set(path);
-    if( rtn.get_type() != type ) rtn = type;
+    if (rtn.get_type() != type) rtn = type;
     return rtn;
   }
   template <typename T>
@@ -68,22 +74,22 @@ class LTVar {
     rtn = value;
     return rtn;
   }
-  LTVar get(const std::string& path) const{ return get( path.c_str());}
-  LTVar get(const char *path) const;
-  std::string get(const char path[], const char* default_value) const{
+  LTVar get(const std::string& path) const { return get(path.c_str()); }
+  LTVar get(const char* path) const;
+  std::string get(const char path[], const char* default_value) const {
     LTVar value = get(path);
     if (value.get_type() == Type::kVoid) return std::string(default_value);
-    return static_cast<std::string>(value);
+    return value;
   }
   template <typename T>
-  T get(const char path[], T default_value) const{
+  T get(const char path[], T default_value) const {
     LTVar value = get(path);
     if (value.get_type() == Type::kVoid) return default_value;
     return static_cast<T>(value);
   }
   LTVarIterator begin() const;
   LTVarIterator end() const;
-  LTVarIterator find(const std::string& tag) const;
+  LTVarIterator find(const char tag[]) const;
 
   friend class Decoder;
   friend class Encoder;

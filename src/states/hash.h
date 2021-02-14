@@ -26,22 +26,21 @@ class Hash : public Void {
   virtual int get_int() const { return value_.size(); }
   virtual std::string get_text() const { return "<hash>"; }
 
-  virtual LTVar& operator[](const std::string& tag);
-  virtual const LTVar& get(const std::string& tag) const;
+  virtual LTVar& operator[](const char tag[]);
+  virtual const LTVar& get(const char tag[]) const;
   virtual const LTVar& get(const size_t idx) const { return Void::get(idx); }
 
   virtual LTVarIterator begin() const;
   virtual LTVarIterator end() const;
-  virtual LTVarIterator find(const std::string& tag) const;
+  virtual LTVarIterator find(const char tag[]) const;
 
-  virtual LTVar& set(const std::string& tag, const LTVar& value) {
+  virtual LTVar& set(const char tag[], const LTVar& value) {
+    if (tag == nullptr || tag == 0)
+      throw std::invalid_argument("null pointer tag");
     return value_[tag] = value;
   }
   virtual LTVar& set(const size_t idx, const LTVar& value) {
     return Void::set(idx, value);
-  }
-  virtual LTVar& set(const char* tag, const LTVar& value) {
-    return Void::set(tag, value);
   }
 
   virtual void encode(Encoder& output) const;

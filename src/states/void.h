@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
 #include "iterator.h"
 
 class Encoder;
@@ -46,31 +47,18 @@ class Void {
   virtual int get_int() const { throw invalid_cast(); }
   virtual std::string get_text() const { return "<void>"; }
 
-  virtual const LTVar& get(const char* tag) const {
-    if (tag == nullptr || tag == 0)
-      throw std::invalid_argument("null pointer tag");
-    return get(std::string(tag));
-  }
-  virtual const LTVar& get(const std::string& tag) const {
-    throw invalid_cast();
-  }
+  virtual const LTVar& get(const char tag[]) const { throw invalid_cast(); }
+
   virtual const LTVar& get(const size_t idx) const { throw invalid_cast(); }
 
   virtual LTVar& operator[](const size_t idx) { throw invalid_cast(); }
-  virtual LTVar& operator[](const std::string& tag) { throw invalid_cast(); }
+  virtual LTVar& operator[](const char tag[]) { throw invalid_cast(); }
 
   virtual LTVarIterator begin() const { throw invalid_cast(); }
   virtual LTVarIterator end() const { throw invalid_cast(); }
-  virtual LTVarIterator find(const std::string& tag) const {
-    throw invalid_cast();
-  }
+  virtual LTVarIterator find(const char tag[]) const { throw invalid_cast(); }
 
-  virtual LTVar& set(const char* tag, const LTVar& value) {
-    if (tag == nullptr || tag == 0)
-      throw std::invalid_argument("null pointer tag");
-    return set(std::string(tag), value);
-  }
-  virtual LTVar& set(const std::string& tag, const LTVar& value) {
+  virtual LTVar& set(const char tag[], const LTVar& value) {
     throw invalid_cast();
   }
   virtual LTVar& set(const size_t idx, const LTVar& value) {

@@ -1,5 +1,7 @@
 #include "ltvar.h"
+
 #include <string.h>
+
 #include "tokenizer.h"
 
 LTVar::LTVar() : state_(new Void()), type_(kVoid) {}
@@ -145,21 +147,36 @@ LTVar::operator double() const { return state_.get()->get_double(); }
 LTVar::operator int() const { return state_.get()->get_int(); }
 LTVar::operator std::string() const { return state_.get()->get_text(); }
 
-LTVar& LTVar::operator[](const size_t idx) { return (*(state_.get()))[idx]; }
+LTVar& LTVar::operator[](size_t idx) { return (*(state_.get()))[idx]; }
+LTVar& LTVar::operator[](int idx) { return (*(state_.get()))[idx]; }
+LTVar& LTVar::operator[](const char tag[]) { return (*(state_.get()))[tag]; }
+LTVar& LTVar::operator[](const LTVar& value) {
+  if (value == Type::kInteger) {
+    return (*(state_.get()))[static_cast<int>(value)];
+  } else {
+    return (*(state_.get()))[static_cast<std::string>(value).c_str()];
+  }
+}
 
-const LTVar& LTVar::operator[](const size_t idx) const {
+const LTVar& LTVar::operator[](size_t idx) const {
   return state_.get()->get(idx);
 }
 
-LTVar& LTVar::operator[](const std::string& tag) {
-  return (*(state_.get()))[tag];
-}
+const LTVar& LTVar::operator[](int idx) const { return state_.get()->get(idx); }
 
-const LTVar& LTVar::operator[](const std::string& tag) const {
+const LTVar& LTVar::operator[](const char tag[]) const {
   return state_.get()->get(tag);
 }
 
-LTVar LTVar::get(const char *path) const{
+const LTVar& LTVar::operator[](const LTVar& value) const {
+  if (value == Type::kInteger) {
+    return state_.get()->get(static_cast<int>(value));
+  } else {
+    return state_.get()->get(static_cast<std::string>(value).c_str());
+  }
+}
+
+LTVar LTVar::get(const char* path) const {
   Tokenizer tk(path);
   static LTVar void_return;
 
@@ -170,10 +187,10 @@ LTVar LTVar::get(const char *path) const{
     } else if (rtn->get_type() == Type::kHash &&
                tk.getType() == Tokenizer::kTag) {
       auto tag = tk.getTag();
-      if (rtn->state_.get()->find(tag) == rtn->state_.get()->end()) {
+      if (rtn->state_.get()->find(tag.c_str()) == rtn->state_.get()->end()) {
         rtn = &void_return;
       } else {
-        rtn = &(*rtn)[tag];
+        rtn = &(*rtn)[tag.c_str()];
       }
     } else if (rtn->get_type() == Type::kArray &&
                tk.getType() == Tokenizer::kIndex) {
@@ -204,7 +221,7 @@ LTVar& LTVar::set(const char path[]) {
     }
     if (rtn->get_type() == Type::kHash && tk.getType() == Tokenizer::kTag) {
       auto tag = tk.getTag();
-      rtn = &(*rtn)[tag];
+      rtn = &(*rtn)[tag.c_str()];
     } else if (rtn->get_type() == Type::kArray &&
                tk.getType() == Tokenizer::kIndex) {
       auto index = tk.getIndex();
@@ -216,19 +233,8 @@ LTVar& LTVar::set(const char path[]) {
   return *rtn;
 }
 
-// LTVar& LTVar::get(const char path[] ){
-//  const char *start = path;
-//  const char *end;
-//  LTVar *rtn = this;
-//  while( (end = strchr( start, '.')) != nullptr ){
-//    rtn = &(*(rtn->state_.get()))[std::string(start, end - start)];
-//    start = ++end;
-//  }
-//  rtn = &(*(rtn->state_.get()))[std::string(start, strlen(path) - (start -
-//  path ))]; return *rtn;
-//}
 LTVarIterator LTVar::begin() const { return state_.get()->begin(); }
 LTVarIterator LTVar::end() const { return state_.get()->end(); }
-LTVarIterator LTVar::find(const std::string& tag) const {
+LTVarIterator LTVar::find(const char tag[]) const {
   return state_.get()->find(tag);
 }

@@ -2,6 +2,76 @@
 #include "test_data.h"
 #include "utest.h"
 
+TEST(LTVar, voidvalue) {
+  LTVar value;
+  ASSERT_EQ(value, Void());
+  ASSERT_EQ(value, LTVar::kVoid);
+  ASSERT_NE(value, LTVar::kArray);
+  ASSERT_THROW(value.find("tag"), invalid_cast);
+}
+
+TEST(LTVar, bool) {
+  LTVar value(TEST_VALUE_BOOL_TRUE);
+  ASSERT_EQ(value, TEST_VALUE_BOOL_TRUE);
+  value = TEST_VALUE_BOOL_FALSE;
+  ASSERT_EQ(value, TEST_VALUE_BOOL_FALSE);
+  bool cast_value = static_cast<bool>(value);
+  ASSERT_EQ(value, cast_value);
+  ASSERT_NE(value, TEST_VALUE_BOOL_TRUE);
+  ASSERT_EQ(value, LTVar::kBool);
+  ASSERT_NE(value, LTVar::kVoid);
+  ASSERT_THROW(value.find("tag"), invalid_cast);
+}
+
+TEST(LTVar, double) {
+  LTVar value(TEST_VALUE_DOUBLE);
+  ASSERT_EQ(value, TEST_VALUE_DOUBLE);
+  value = TEST_VALUE_DOUBLE * 2;
+  ASSERT_EQ(value, TEST_VALUE_DOUBLE * 2);
+  double cast_value = (double)value;
+  ASSERT_EQ(value, cast_value);
+  ASSERT_NE(value, TEST_VALUE_DOUBLE);
+  ASSERT_EQ(value, LTVar::kDouble);
+  ASSERT_NE(value, LTVar::kVoid);
+  ASSERT_THROW(value.find("tag"), invalid_cast);
+}
+
+TEST(LTVar, integer) {
+  LTVar value(TEST_VALUE_INTEGER);
+  ASSERT_EQ(value, TEST_VALUE_INTEGER);
+  value = TEST_VALUE_INTEGER * 2;
+  ASSERT_EQ(value, TEST_VALUE_INTEGER * 2);
+  int cast_value = static_cast<int>(value);
+  ASSERT_EQ(value, cast_value);
+  ASSERT_NE(value, TEST_VALUE_INTEGER);
+  ASSERT_EQ(value, LTVar::kInteger);
+  ASSERT_NE(value, LTVar::kVoid);
+  ASSERT_THROW(value.find("tag"), invalid_cast);
+}
+
+TEST(LTVar, string) {
+  LTVar value(TEST_VALUE_TEXT);
+  ASSERT_EQ(value, TEST_VALUE_TEXT);
+  value = TEST_VALUE_TEXT + "2";
+  ASSERT_EQ(value, TEST_VALUE_TEXT + "2");
+  std::string cast_value = value;
+  ASSERT_EQ(value, cast_value);
+  ASSERT_NE(value, TEST_VALUE_TEXT);
+  ASSERT_EQ(value, LTVar::kText);
+  ASSERT_NE(value, LTVar::kVoid);
+  ASSERT_THROW(value.find("tag"), invalid_cast);
+}
+
+TEST(LTVar, constChar) {
+  LTVar value(TEST_VALUE_CONSTCHAR);
+  ASSERT_EQ(value, std::string(TEST_VALUE_CONSTCHAR));
+  std::string cast_value = value;
+  ASSERT_EQ(value, cast_value);
+  ASSERT_EQ(value, LTVar::kText);
+  ASSERT_NE(value, LTVar::kVoid);
+  ASSERT_THROW(value.find("tag"), invalid_cast);
+}
+
 TEST(LTVar, array) {
   LTVar value(test_array);
   ASSERT_EQ(value[1], TEST_VALUE_DOUBLE);
@@ -16,84 +86,131 @@ TEST(LTVar, array) {
   ASSERT_EQ(value[6][1], TEST_VALUE_DOUBLE);
   ASSERT_EQ(value, LTVar::kArray);
   ASSERT_NE(value, LTVar::kVoid);
-}
-
-TEST(LTVar, bool) {
-  LTVar value(TEST_VALUE_BOOL_TRUE);
-  ASSERT_EQ(value, TEST_VALUE_BOOL_TRUE);
-  value = TEST_VALUE_BOOL_FALSE;
-  ASSERT_EQ(value, TEST_VALUE_BOOL_FALSE);
-  bool cast_value = static_cast<bool>(value);
-  ASSERT_EQ(value, cast_value);
-  ASSERT_NE(value, TEST_VALUE_BOOL_TRUE);
-  ASSERT_EQ(value, LTVar::kBool);
-  ASSERT_NE(value, LTVar::kVoid);
-}
-
-TEST(LTVar, double) {
-  LTVar value(TEST_VALUE_DOUBLE);
-  ASSERT_EQ(value, TEST_VALUE_DOUBLE);
-  value = TEST_VALUE_DOUBLE * 2;
-  ASSERT_EQ(value, TEST_VALUE_DOUBLE * 2);
-  double cast_value = (double)value;
-  ASSERT_EQ(value, cast_value);
-  ASSERT_NE(value, TEST_VALUE_DOUBLE);
-  ASSERT_EQ(value, LTVar::kDouble);
-  ASSERT_NE(value, LTVar::kVoid);
+  ASSERT_THROW(value.find("tag"), invalid_cast);
 }
 
 TEST(LTVar, hash) {
-  LTVar value(test_hash);
-  ASSERT_EQ(value, test_hash);
-  test_hash["tag"] = TEST_VALUE_INTEGER;
-  ASSERT_NE(value, test_hash);
+  LTVar reference(test_hash);
+  LTVar value(reference);
+  ASSERT_EQ(value, reference);
+  reference["tag"] = TEST_VALUE_INTEGER;
+  ASSERT_NE(value, reference);
   value["tag"] = TEST_VALUE_INTEGER;
-  ASSERT_EQ(value, test_hash);
+  ASSERT_EQ(value, reference);
   ASSERT_EQ(value.size(), 6);
-  value["tag2"] = test_hash;
+  value["tag2"] = reference;
   ASSERT_EQ(value["tag2"]["double"], TEST_VALUE_DOUBLE);
   ASSERT_EQ(value, LTVar::kHash);
   ASSERT_NE(value, LTVar::kVoid);
+  ASSERT_EQ(*value.find("tag"), TEST_VALUE_INTEGER);
+  ASSERT_EQ(value.find("non_existent"), value.end());
 }
 
-TEST(LTVar, integer) {
-  LTVar value(TEST_VALUE_INTEGER);
-  ASSERT_EQ(value, TEST_VALUE_INTEGER);
-  value = TEST_VALUE_INTEGER * 2;
-  ASSERT_EQ(value, TEST_VALUE_INTEGER * 2);
-  int cast_value = static_cast<int>(value);
-  ASSERT_EQ(value, cast_value);
-  ASSERT_NE(value, TEST_VALUE_INTEGER);
-  ASSERT_EQ(value, LTVar::kInteger);
-  ASSERT_NE(value, LTVar::kVoid);
+TEST(LTVar, array_bracket_index) {
+  LTVar value(test_array);
+
+  ASSERT_EQ(value[0], TEST_VALUE_BOOL_TRUE);
+  ASSERT_EQ(value[1], TEST_VALUE_DOUBLE);
+  ASSERT_EQ(value.size(), test_array.size());
+  ASSERT_EQ(value[100], LTVar::kVoid);
+  ASSERT_EQ(value.size(), 101);
 }
 
-TEST(LTVar, string) {
-  LTVar value(TEST_VALUE_TEXT);
-  ASSERT_EQ(value, TEST_VALUE_TEXT);
-  value = TEST_VALUE_TEXT + "2";
-  ASSERT_EQ(value, TEST_VALUE_TEXT + "2");
-  std::string cast_value = value;
-  ASSERT_EQ(value, cast_value);
-  ASSERT_NE(value, TEST_VALUE_TEXT);
-  ASSERT_EQ(value, LTVar::kText);
-  ASSERT_NE(value, LTVar::kVoid);
+TEST(LTVar, array_bracket_char) {
+  LTVar value(test_array);
+
+  ASSERT_THROW(value["tag"], invalid_cast);
 }
 
-TEST(LTVar, constChar) {
-  LTVar value(TEST_VALUE_CONSTCHAR);
-  ASSERT_EQ(value, std::string(TEST_VALUE_CONSTCHAR));
-  std::string cast_value = value;
-  ASSERT_EQ(value, cast_value);
-  ASSERT_EQ(value, LTVar::kText);
-  ASSERT_NE(value, LTVar::kVoid);
+TEST(LTVar, array_bracket_ltvar) {
+  LTVar value(test_array);
+  LTVar tag("tag");
+  ASSERT_THROW(value[tag], invalid_cast);
+  LTVar index(50);
+  ASSERT_EQ(value[index], LTVar::kVoid);
+  ASSERT_NE(value, test_array);
+  ASSERT_EQ(value.size(), 51);
 }
 
-TEST(LTVar, voidvalue) {
-  LTVar value;
-  ASSERT_EQ(value, Void());
-  ASSERT_EQ(value, LTVar::kVoid);
-  ASSERT_NE(value, LTVar::kArray);
+TEST(LTVar, hash_bracket_index) {
+  LTVar value(test_hash);
+
+  ASSERT_THROW(value[0], invalid_cast);
+  ASSERT_THROW(value[1], invalid_cast);
+  ASSERT_EQ(value.size(), test_hash.size());
+}
+
+TEST(LTVar, hash_bracket_char) {
+  LTVar value(test_hash);
+
+  ASSERT_EQ(value["bool"], TEST_VALUE_BOOL_TRUE);
+  ASSERT_EQ(value["double"], TEST_VALUE_DOUBLE);
+  ASSERT_EQ(value.size(), test_hash.size());
+  ASSERT_EQ(value["new_tag"], LTVar::kVoid);
+  ASSERT_EQ(value.size(), test_hash.size() + 1);
+}
+
+TEST(LTVar, hash_bracket_ltvar) {
+  LTVar value(test_hash);
+  LTVar index(5);
+  ASSERT_THROW(value[index], invalid_cast);
+  LTVar tag("tag");
+  ASSERT_EQ(value[tag], LTVar::kVoid);
+  ASSERT_NE(value, test_hash);
+  ASSERT_NE(value.size(), test_hash.size());
+}
+
+TEST(LTVar, const_array_bracket_index) {
+  const LTVar value(test_array);
+
+  ASSERT_EQ(value[0], TEST_VALUE_BOOL_TRUE);
+  ASSERT_EQ(value[1], TEST_VALUE_DOUBLE);
+  ASSERT_EQ(value.size(), test_array.size());
+  ASSERT_EQ(value[100], LTVar::kVoid);
+  ASSERT_EQ(value.size(), test_array.size());
+}
+
+TEST(LTVar, const_array_bracket_char) {
+  const LTVar value(test_array);
+
+  ASSERT_THROW(value["tag"], invalid_cast);
+}
+
+TEST(LTVar, const_array_bracket_ltvar) {
+  const LTVar value(test_array);
+  LTVar tag("tag");
+  ASSERT_THROW(value[tag], invalid_cast);
+  LTVar index(50);
+  ASSERT_EQ(value[index], LTVar::kVoid);
+  ASSERT_EQ(value, test_array);
+}
+
+TEST(LTVar, const_hash_bracket_index) {
+  const LTVar value(test_hash);
+
+  ASSERT_THROW(value[0], invalid_cast);
+  ASSERT_THROW(value[1], invalid_cast);
+  ASSERT_EQ(value.size(), test_hash.size());
+}
+
+TEST(LTVar, const_hash_bracket_char) {
+  const LTVar value(test_hash);
+
+  ASSERT_EQ(value["bool"], TEST_VALUE_BOOL_TRUE);
+  ASSERT_EQ(value["double"], TEST_VALUE_DOUBLE);
+  ASSERT_EQ(value.size(), test_hash.size());
+  ASSERT_EQ(value["new_tag"], LTVar::kVoid);
+  ASSERT_EQ(value.size(), test_hash.size());
+}
+
+TEST(LTVar, const_hash_bracket_ltvar) {
+  const LTVar value(test_hash);
+  LTVar index(5);
+  ASSERT_THROW(value[index], invalid_cast);
+  LTVar tag("tag");
+  ASSERT_EQ(value[tag], LTVar::kVoid);
+  ASSERT_EQ(value, test_hash);
+  ASSERT_EQ(value.size(), test_hash.size());
 }
 
 TEST(LTVar, iterator_hash) {
@@ -103,11 +220,25 @@ TEST(LTVar, iterator_hash) {
   ASSERT_EQ(count, value.size());
 }
 
+TEST(LTVar, iterator_hash_increment) {
+  LTVar value(test_hash);
+  auto iterator = value.begin();
+  iterator++;
+  ASSERT_EQ(*iterator, test_hash["double"]);
+}
+
 TEST(LTVar, iterator_array) {
   LTVar value(test_array);
   size_t count = 0;
   for (auto item : value) count++;
   ASSERT_EQ(count, value.size());
+}
+
+TEST(LTVar, iterator_array_increment) {
+  LTVar value(test_array);
+  auto iterator = value.begin();
+  iterator++;
+  ASSERT_EQ(*iterator, test_array[1]);
 }
 
 TEST(LTVar, iterator_type) {
@@ -284,10 +415,10 @@ TEST(LTVar, get_missing_default) {
 TEST(LTVar, reset_type) {
   LTVar value(LTVar::kHash);
 
-  value.set( "level1.level2", "text" );
-  value.set( "level1", LTVar::kHash );
-  ASSERT_EQ(value.get("level1.level2" ), std::string("text") );
-  value.set( "level1", LTVar::kBool );
+  value.set("level1.level2", "text");
+  value.set("level1", LTVar::kHash);
+  ASSERT_EQ(value.get("level1.level2"), std::string("text"));
+  value.set("level1", LTVar::kBool);
   ASSERT_EQ(LTVar::kBool, value["level1"]);
 }
 TEST(LTVar, set_hash_first_level) {
