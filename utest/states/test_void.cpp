@@ -32,7 +32,7 @@ TEST(VoidValue, get) {
   ASSERT_THROW(value["tag"], invalid_cast);
   ASSERT_THROW(value.get((size_t)0), invalid_cast);
   ASSERT_THROW(value[(size_t)0], invalid_cast);
-  ASSERT_THROW(value.get(nullptr), std::invalid_argument);
+  ASSERT_THROW(value.get(nullptr), invalid_cast);
 }
 
 TEST(VoidValue, get_const) {

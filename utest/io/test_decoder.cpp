@@ -1,7 +1,6 @@
+#include "io/mockdecoder.h"
 #include "test_data.h"
 #include "utest.h"
-
-#include "io/mockdecoder.h"
 
 using ::testing::An;
 
@@ -122,4 +121,46 @@ TEST(Decoder, decode_void) {
   std::stringstream stream;
 
   stream >> decoder;
+}
+
+TEST(Decoder, array_not_implemented) {
+  LTVar value(test_array);
+  NullDecoder decoder(value);
+  ASSERT_THROW(decoder.decode(value), std::invalid_argument);
+}
+
+TEST(Decoder, decode_bool_not_implemented) {
+  LTVar value(TEST_VALUE_BOOL_TRUE);
+  NullDecoder decoder(value);
+  ASSERT_THROW(decoder.decode(value), std::invalid_argument);
+}
+
+TEST(Decoder, decode_double_not_implemented) {
+  LTVar value(TEST_VALUE_DOUBLE);
+  NullDecoder decoder(value);
+  ASSERT_THROW(decoder.decode(value), std::invalid_argument);
+}
+
+TEST(Decoder, decode_hash_not_implemented) {
+  LTVar value(test_hash);
+  NullDecoder decoder(value);
+  ASSERT_THROW(decoder.decode(value), std::invalid_argument);
+}
+
+TEST(Decoder, decode_integer_not_implemented) {
+  LTVar value(TEST_VALUE_INTEGER);
+  NullDecoder decoder(value);
+  ASSERT_THROW(decoder.decode(value), std::invalid_argument);
+}
+
+TEST(Decoder, decode_text_not_implemented) {
+  LTVar value(TEST_VALUE_TEXT);
+  NullDecoder decoder(value);
+  ASSERT_THROW(decoder.decode(value), std::invalid_argument);
+}
+
+TEST(Decoder, decode_void_not_implemented) {
+  LTVar value;
+  NullDecoder decoder(value);
+  ASSERT_THROW(decoder.decode(value), std::invalid_argument);
 }

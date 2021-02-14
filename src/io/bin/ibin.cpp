@@ -1,23 +1,23 @@
 #include "ibin.h"
+
 #include "iterator.h"
 #include "ltvar.h"
-
 
 void IBin::decode(LTVar& value) {
   uint8_t type = LTVar::Type::kVoid;
   (*i_stream_).read(reinterpret_cast<char*>(&type), sizeof(type));
-	switch( type ){
-		case LTVar::kVoid:
-		case LTVar::kBool:
-		case LTVar::kDouble:
-		case LTVar::kHash:
-		case LTVar::kInteger:
-		case LTVar::kArray:
-		case LTVar::kText:
-		break;
-		default:
-			throw std::invalid_argument("invalid binary form");
-		break;
+  switch (type) {
+    case LTVar::kVoid:
+    case LTVar::kBool:
+    case LTVar::kDouble:
+    case LTVar::kHash:
+    case LTVar::kInteger:
+    case LTVar::kArray:
+    case LTVar::kText:
+      break;
+    default:
+      throw std::invalid_argument("invalid binary form");
+      break;
   }
   value = LTVar::Type(type);
   deserializeInto(value);
@@ -79,7 +79,7 @@ void IBin::decode(Hash& value) {
   decode((*i_stream_), size);
   for (size_t idx = 0; idx < size; idx++) {
     decode(tag);
-    decode(value[tag]);
+    decode(value[tag.c_str()]);
   }
 }
 

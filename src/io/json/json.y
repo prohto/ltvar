@@ -8,11 +8,11 @@
 void yyerror( JsonState* state, void *scanner, const char *str ){
   state->setFailed();
 }
- 
+
 int yywrap(){
   return 1;
-} 
-  
+}
+
 %}
 
 %pure_parser

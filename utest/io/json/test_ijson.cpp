@@ -147,6 +147,15 @@ TEST(IJson, integer) {
   ASSERT_EQ(123, in_value);
 }
 
+TEST(IJson, hex_number) {
+  std::istringstream in_stream("0xff");
+  LTVar in_value;
+  IJson ijson(in_value);
+  in_stream >> ijson;
+  ASSERT_EQ(LTVar::Type::kInteger, in_value);
+  ASSERT_EQ(255, in_value);
+}
+
 TEST(IJson, text) {
   std::istringstream in_stream("\"anything\"");
   LTVar in_value;
@@ -154,6 +163,15 @@ TEST(IJson, text) {
   in_stream >> ijson;
   ASSERT_EQ(LTVar::Type::kText, in_value);
   ASSERT_EQ(std::string("anything"), in_value);
+}
+
+TEST(IJson, empty_text) {
+  std::istringstream in_stream("\"\"");
+  LTVar in_value;
+  IJson ijson(in_value);
+  in_stream >> ijson;
+  ASSERT_EQ(LTVar::Type::kText, in_value);
+  ASSERT_EQ(std::string(""), in_value);
 }
 
 TEST(IJson, escaped_text) {
